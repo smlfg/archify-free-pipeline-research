@@ -1,7 +1,7 @@
 {
   "source": "generated top-level artifacts",
   "published_in_repo": true,
-  "artifact_count": 129,
+  "artifact_count": 137,
   "excluded": "generated/.logs and nested run logs are kept local to avoid publishing raw logs; top-level HTML, JSON, PNG, and claim summaries are included.",
   "artifacts": [
     {
@@ -777,6 +777,54 @@
       "name": "hai-tiktok.claims.md",
       "type": "claims",
       "size_bytes": 14776
+    },
+    {
+      "path": "generated/cae.architecture.composed.candidate.json",
+      "name": "cae.architecture.composed.candidate.json",
+      "type": "data",
+      "size_bytes": 6912
+    },
+    {
+      "path": "generated/cae.architecture.composed.html",
+      "name": "cae.architecture.composed.html",
+      "type": "archify_html",
+      "size_bytes": 813408
+    },
+    {
+      "path": "generated/cae.architecture.composed.visual-check.1440x900.dark.png",
+      "name": "cae.architecture.composed.visual-check.1440x900.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 127826
+    },
+    {
+      "path": "generated/cae.architecture.composed.visual-check.1440x900.light.png",
+      "name": "cae.architecture.composed.visual-check.1440x900.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 140162
+    },
+    {
+      "path": "generated/cae.architecture.composed.visual-check.2048x1320.dark.png",
+      "name": "cae.architecture.composed.visual-check.2048x1320.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 166555
+    },
+    {
+      "path": "generated/cae.architecture.composed.visual-check.2048x1320.light.png",
+      "name": "cae.architecture.composed.visual-check.2048x1320.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 184140
+    },
+    {
+      "path": "generated/cae.architecture.composed.visual-check.html",
+      "name": "cae.architecture.composed.visual-check.html",
+      "type": "visual_check_html",
+      "size_bytes": 1994
+    },
+    {
+      "path": "generated/cae.architecture.composed.visual-check.json",
+      "name": "cae.architecture.composed.visual-check.json",
+      "type": "data",
+      "size_bytes": 17042
     }
   ]
 }

@@ -1,0 +1,378 @@
+{
+ "boundaries": [
+  {
+   "kind": "region",
+   "label": "Projektstand b996766",
+   "wraps": [
+    "cli",
+    "liverun",
+    "snapshot",
+    "runner",
+    "composer",
+    "bericht",
+    "altpipeline"
+   ]
+  }
+ ],
+ "cards": [
+  {
+   "dot": "cyan",
+   "items": [
+    "CLI (analyze) → simple.run friert das Projekt per git ein",
+    "6 Free-Scouts laufen parallel, Composer schreibt Bericht",
+    "Ablage: report.md + index.html, kein Claim-Gate"
+   ],
+   "title": "Live-Pfad"
+  },
+  {
+   "dot": "amber",
+   "items": [
+    "SCOUT_CONTRACT (JSON-Claims) + merge() + deliver()",
+    "Nur dieser Pfad rief den Nachbar-Renderer auf",
+    "Im Live-Pfad ersetzt durch Freitext + ASCII-Karte"
+   ],
+   "title": "Alt-Pipeline (stillgelegt)"
+  },
+  {
+   "dot": "rose",
+   "items": [
+    "Extern: 6 Modelle und Renderer ../archify",
+    "Snapshot schliesst generated/.archify-project aus",
+    "Statischer Bericht: Modelltext wird escaped, nie ausgefuehrt"
+   ],
+   "title": "Grenzen"
+  }
+ ],
+ "components": [
+  {
+   "id": "cli",
+   "label": "CLI",
+   "sources": [
+    {
+     "label": "ruft cli.main",
+     "line": 7,
+     "path": "codex-archify-experiment/bin/archify-project"
+    },
+    {
+     "label": "argparse analyze",
+     "line": 12,
+     "path": "codex-archify-experiment/project_reader/cli.py"
+    }
+   ],
+   "sublabel": "analyze",
+   "type": "backend",
+   "pos": [
+    60,
+    300
+   ],
+   "size": [
+    120,
+    60
+   ]
+  },
+  {
+   "id": "liverun",
+   "label": "Live-Run simple.run",
+   "sources": [
+    {
+     "label": "def run",
+     "line": 10,
+     "path": "codex-archify-experiment/project_reader/simple.py"
+    }
+   ],
+   "sublabel": "ein Paket, ein Prompt",
+   "type": "backend",
+   "pos": [
+    240,
+    300
+   ],
+   "size": [
+    140,
+    60
+   ]
+  },
+  {
+   "id": "snapshot",
+   "label": "Snapshot-Freeze",
+   "sources": [
+    {
+     "label": "git freeze",
+     "line": 29,
+     "path": "codex-archify-experiment/project_reader/evidence.py"
+    },
+    {
+     "label": "EXCLUDED",
+     "line": 12,
+     "path": "codex-archify-experiment/project_reader/evidence.py"
+    }
+   ],
+   "sublabel": "git + Exclude-Liste",
+   "type": "backend",
+   "pos": [
+    470,
+    300
+   ],
+   "size": [
+    140,
+    60
+   ]
+  },
+  {
+   "id": "runner",
+   "label": "Model-Runner",
+   "sources": [
+    {
+     "label": "class OpenCode",
+     "line": 54,
+     "path": "codex-archify-experiment/project_reader/runner.py"
+    },
+    {
+     "label": "def call",
+     "line": 74,
+     "path": "codex-archify-experiment/project_reader/runner.py"
+    }
+   ],
+   "sublabel": "opencode-CLI",
+   "type": "backend",
+   "pos": [
+    730,
+    150
+   ],
+   "size": [
+    140,
+    60
+   ]
+  },
+  {
+   "id": "scouts",
+   "label": "6 Free-Scouts",
+   "sources": [
+    {
+     "label": "MODELS x6",
+     "line": 14,
+     "path": "codex-archify-experiment/project_reader/runner.py"
+    },
+    {
+     "label": "ThreadPool",
+     "line": 40,
+     "path": "codex-archify-experiment/project_reader/simple.py"
+    }
+   ],
+   "sublabel": "freie Modelle",
+   "type": "external",
+   "pos": [
+    730,
+    300
+   ],
+   "size": [
+    140,
+    60
+   ]
+  },
+  {
+   "id": "composer",
+   "label": "Composer + Validator",
+   "sources": [
+    {
+     "label": "Composer-Aufruf",
+     "line": 56,
+     "path": "codex-archify-experiment/project_reader/simple.py"
+    },
+    {
+     "label": "validate_candidates",
+     "line": 122,
+     "path": "codex-archify-experiment/project_reader/composer.py"
+    }
+   ],
+   "sublabel": "Redakteur + Pruefung",
+   "type": "backend",
+   "pos": [
+    950,
+    300
+   ],
+   "size": [
+    140,
+    60
+   ]
+  },
+  {
+   "id": "bericht",
+   "label": "Bericht",
+   "sources": [
+    {
+     "label": "def report",
+     "line": 32,
+     "path": "codex-archify-experiment/project_reader/report.py"
+    },
+    {
+     "label": "escaped static",
+     "line": 1,
+     "path": "codex-archify-experiment/project_reader/report.py"
+    }
+   ],
+   "sublabel": "report.md + index.html",
+   "type": "frontend",
+   "pos": [
+    1180,
+    300
+   ],
+   "size": [
+    130,
+    60
+   ]
+  },
+  {
+   "id": "altpipeline",
+   "label": "Alt-Pipeline (stillgelegt)",
+   "sources": [
+    {
+     "label": "SCOUT_CONTRACT",
+     "line": 17,
+     "path": "codex-archify-experiment/project_reader/pipeline.py"
+    },
+    {
+     "label": "merge claims",
+     "line": 135,
+     "path": "codex-archify-experiment/project_reader/evidence.py"
+    },
+    {
+     "label": "deliver",
+     "line": 95,
+     "path": "codex-archify-experiment/project_reader/pipeline.py"
+    }
+   ],
+   "sublabel": "JSON-Claims, ungenutzt",
+   "type": "backend",
+   "pos": [
+    440,
+    450
+   ],
+   "size": [
+    200,
+    64
+   ]
+  },
+  {
+   "id": "nachbar",
+   "label": "Archify-Nachbar",
+   "sources": [
+    {
+     "label": "relativer Link ../archify",
+     "line": 11,
+     "path": "codex-archify-experiment/README.md"
+    }
+   ],
+   "sublabel": "extern, kein Bestandteil",
+   "type": "external",
+   "pos": [
+    920,
+    450
+   ],
+   "size": [
+    200,
+    64
+   ]
+  }
+ ],
+ "connections": [
+  {
+   "from": "cli",
+   "id": "cli-to-liverun",
+   "label": "analyze",
+   "to": "liverun"
+  },
+  {
+   "from": "liverun",
+   "id": "liverun-to-snapshot",
+   "label": "friert ein",
+   "to": "snapshot"
+  },
+  {
+   "from": "snapshot",
+   "id": "snapshot-to-scouts",
+   "label": "Prompt-Daten",
+   "to": "scouts"
+  },
+  {
+   "from": "liverun",
+   "id": "liverun-to-runner",
+   "label": "ruft auf",
+   "to": "runner",
+   "fromSide": "top"
+  },
+  {
+   "from": "runner",
+   "id": "runner-to-scouts",
+   "label": "Fan-out",
+   "to": "scouts",
+   "labelDy": 24
+  },
+  {
+   "from": "scouts",
+   "id": "scouts-to-composer",
+   "label": "Berichte",
+   "to": "composer"
+  },
+  {
+   "from": "composer",
+   "id": "composer-to-bericht",
+   "label": "verfasst",
+   "to": "bericht"
+  },
+  {
+   "from": "snapshot",
+   "id": "snapshot-to-alt",
+   "label": "Alt-Pfad",
+   "to": "altpipeline",
+   "variant": "dashed",
+   "labelDy": 24
+  },
+  {
+   "from": "altpipeline",
+   "id": "alt-to-nachbar",
+   "label": "deliver (stillgelegt)",
+   "to": "nachbar",
+   "variant": "dashed"
+  }
+ ],
+ "diagram_type": "architecture",
+ "meta": {
+  "quality_profile": "showcase",
+  "repository": {
+   "revision": "b99676615f512e756adc5c41b28dbc7d8edaebf9",
+   "url": "https://github.com/smlfg/archify-free-pipeline-research"
+  },
+  "title": "codex-archify-experiment — komponierte Architektur",
+  "views": [
+   {
+    "focus": [
+     "cli",
+     "liverun",
+     "snapshot",
+     "runner",
+     "scouts",
+     "composer",
+     "bericht"
+    ],
+    "id": "live-pfad",
+    "label": "Live-Pfad",
+    "note": "Vom CLI-Befehl zum statischen Bericht ohne Claim-Gate."
+   },
+   {
+    "focus": [
+     "snapshot",
+     "altpipeline",
+     "nachbar"
+    ],
+    "id": "alt-pfad",
+    "label": "Stillgelegter Pfad",
+    "note": "Claim-Gate und Renderer-Anbindung, ungenutzt."
+   }
+  ],
+  "viewBox": [
+   1370,
+   660
+  ]
+ },
+ "schema_version": 1
+}
