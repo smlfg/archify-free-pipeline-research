@@ -1,0 +1,782 @@
+{
+  "source": "generated top-level artifacts",
+  "published_in_repo": true,
+  "artifact_count": 129,
+  "excluded": "generated/.logs and nested run logs are kept local to avoid publishing raw logs; top-level HTML, JSON, PNG, and claim summaries are included.",
+  "artifacts": [
+    {
+      "path": "generated/cae.architecture.mimo-v2.5.html",
+      "name": "cae.architecture.mimo-v2.5.html",
+      "type": "archify_html",
+      "size_bytes": 809584
+    },
+    {
+      "path": "generated/cae.architecture.mimo-v2.5.json",
+      "name": "cae.architecture.mimo-v2.5.json",
+      "type": "data",
+      "size_bytes": 4718
+    },
+    {
+      "path": "generated/cae.architecture.mimo-v2.5.visual-check.1440x900.dark.png",
+      "name": "cae.architecture.mimo-v2.5.visual-check.1440x900.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 121474
+    },
+    {
+      "path": "generated/cae.architecture.mimo-v2.5.visual-check.1440x900.light.png",
+      "name": "cae.architecture.mimo-v2.5.visual-check.1440x900.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 132054
+    },
+    {
+      "path": "generated/cae.architecture.mimo-v2.5.visual-check.2048x1320.dark.png",
+      "name": "cae.architecture.mimo-v2.5.visual-check.2048x1320.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 154983
+    },
+    {
+      "path": "generated/cae.architecture.mimo-v2.5.visual-check.2048x1320.light.png",
+      "name": "cae.architecture.mimo-v2.5.visual-check.2048x1320.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 171056
+    },
+    {
+      "path": "generated/cae.architecture.mimo-v2.5.visual-check.html",
+      "name": "cae.architecture.mimo-v2.5.visual-check.html",
+      "type": "visual_check_html",
+      "size_bytes": 2000
+    },
+    {
+      "path": "generated/cae.architecture.mimo-v2.5.visual-check.json",
+      "name": "cae.architecture.mimo-v2.5.visual-check.json",
+      "type": "data",
+      "size_bytes": 17205
+    },
+    {
+      "path": "generated/cae.architecture.muse-spark-1.3.html",
+      "name": "cae.architecture.muse-spark-1.3.html",
+      "type": "archify_html",
+      "size_bytes": 812380
+    },
+    {
+      "path": "generated/cae.architecture.muse-spark-1.3.json",
+      "name": "cae.architecture.muse-spark-1.3.json",
+      "type": "data",
+      "size_bytes": 5656
+    },
+    {
+      "path": "generated/cae.architecture.muse-spark-1.3.visual-check.1440x900.dark.png",
+      "name": "cae.architecture.muse-spark-1.3.visual-check.1440x900.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 128721
+    },
+    {
+      "path": "generated/cae.architecture.muse-spark-1.3.visual-check.1440x900.light.png",
+      "name": "cae.architecture.muse-spark-1.3.visual-check.1440x900.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 139875
+    },
+    {
+      "path": "generated/cae.architecture.muse-spark-1.3.visual-check.2048x1320.dark.png",
+      "name": "cae.architecture.muse-spark-1.3.visual-check.2048x1320.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 169632
+    },
+    {
+      "path": "generated/cae.architecture.muse-spark-1.3.visual-check.2048x1320.light.png",
+      "name": "cae.architecture.muse-spark-1.3.visual-check.2048x1320.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 187378
+    },
+    {
+      "path": "generated/cae.architecture.muse-spark-1.3.visual-check.html",
+      "name": "cae.architecture.muse-spark-1.3.visual-check.html",
+      "type": "visual_check_html",
+      "size_bytes": 2030
+    },
+    {
+      "path": "generated/cae.architecture.muse-spark-1.3.visual-check.json",
+      "name": "cae.architecture.muse-spark-1.3.visual-check.json",
+      "type": "data",
+      "size_bytes": 17362
+    },
+    {
+      "path": "generated/cae.architecture.nemotron-3-ultra.json",
+      "name": "cae.architecture.nemotron-3-ultra.json",
+      "type": "data",
+      "size_bytes": 7017
+    },
+    {
+      "path": "generated/cae.architecture.nemotron-3.5-lightning.html",
+      "name": "cae.architecture.nemotron-3.5-lightning.html",
+      "type": "archify_html",
+      "size_bytes": 803513
+    },
+    {
+      "path": "generated/cae.architecture.nemotron-3.5-lightning.json",
+      "name": "cae.architecture.nemotron-3.5-lightning.json",
+      "type": "data",
+      "size_bytes": 3199
+    },
+    {
+      "path": "generated/cae.architecture.nemotron-3.5-lightning.visual-check.1440x900.dark.png",
+      "name": "cae.architecture.nemotron-3.5-lightning.visual-check.1440x900.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 54101
+    },
+    {
+      "path": "generated/cae.architecture.nemotron-3.5-lightning.visual-check.1440x900.light.png",
+      "name": "cae.architecture.nemotron-3.5-lightning.visual-check.1440x900.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 54675
+    },
+    {
+      "path": "generated/cae.architecture.nemotron-3.5-lightning.visual-check.2048x1320.dark.png",
+      "name": "cae.architecture.nemotron-3.5-lightning.visual-check.2048x1320.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 72089
+    },
+    {
+      "path": "generated/cae.architecture.nemotron-3.5-lightning.visual-check.2048x1320.light.png",
+      "name": "cae.architecture.nemotron-3.5-lightning.visual-check.2048x1320.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 73039
+    },
+    {
+      "path": "generated/cae.architecture.nemotron-3.5-lightning.visual-check.html",
+      "name": "cae.architecture.nemotron-3.5-lightning.visual-check.html",
+      "type": "visual_check_html",
+      "size_bytes": 2078
+    },
+    {
+      "path": "generated/cae.architecture.nemotron-3.5-lightning.visual-check.json",
+      "name": "cae.architecture.nemotron-3.5-lightning.visual-check.json",
+      "type": "data",
+      "size_bytes": 16930
+    },
+    {
+      "path": "generated/cae.claims.md",
+      "name": "cae.claims.md",
+      "type": "claims",
+      "size_bytes": 7046
+    },
+    {
+      "path": "generated/hai-mcp.architecture.composed.html",
+      "name": "hai-mcp.architecture.composed.html",
+      "type": "archify_html",
+      "size_bytes": 823220
+    },
+    {
+      "path": "generated/hai-mcp.architecture.composed.json",
+      "name": "hai-mcp.architecture.composed.json",
+      "type": "data",
+      "size_bytes": 11575
+    },
+    {
+      "path": "generated/hai-mcp.architecture.composed.visual-check.1440x900.dark.png",
+      "name": "hai-mcp.architecture.composed.visual-check.1440x900.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 142838
+    },
+    {
+      "path": "generated/hai-mcp.architecture.composed.visual-check.1440x900.light.png",
+      "name": "hai-mcp.architecture.composed.visual-check.1440x900.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 152685
+    },
+    {
+      "path": "generated/hai-mcp.architecture.composed.visual-check.2048x1320.dark.png",
+      "name": "hai-mcp.architecture.composed.visual-check.2048x1320.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 201744
+    },
+    {
+      "path": "generated/hai-mcp.architecture.composed.visual-check.2048x1320.light.png",
+      "name": "hai-mcp.architecture.composed.visual-check.2048x1320.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 216527
+    },
+    {
+      "path": "generated/hai-mcp.architecture.composed.visual-check.html",
+      "name": "hai-mcp.architecture.composed.visual-check.html",
+      "type": "visual_check_html",
+      "size_bytes": 2018
+    },
+    {
+      "path": "generated/hai-mcp.architecture.composed.visual-check.json",
+      "name": "hai-mcp.architecture.composed.visual-check.json",
+      "type": "data",
+      "size_bytes": 19370
+    },
+    {
+      "path": "generated/hai-mcp.architecture.haiku.html",
+      "name": "hai-mcp.architecture.haiku.html",
+      "type": "archify_html",
+      "size_bytes": 811415
+    },
+    {
+      "path": "generated/hai-mcp.architecture.haiku.json",
+      "name": "hai-mcp.architecture.haiku.json",
+      "type": "data",
+      "size_bytes": 4915
+    },
+    {
+      "path": "generated/hai-mcp.architecture.haiku.visual-check.1440x900.dark.png",
+      "name": "hai-mcp.architecture.haiku.visual-check.1440x900.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 132294
+    },
+    {
+      "path": "generated/hai-mcp.architecture.haiku.visual-check.1440x900.light.png",
+      "name": "hai-mcp.architecture.haiku.visual-check.1440x900.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 132742
+    },
+    {
+      "path": "generated/hai-mcp.architecture.haiku.visual-check.2048x1320.dark.png",
+      "name": "hai-mcp.architecture.haiku.visual-check.2048x1320.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 157765
+    },
+    {
+      "path": "generated/hai-mcp.architecture.haiku.visual-check.2048x1320.light.png",
+      "name": "hai-mcp.architecture.haiku.visual-check.2048x1320.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 156986
+    },
+    {
+      "path": "generated/hai-mcp.architecture.haiku.visual-check.html",
+      "name": "hai-mcp.architecture.haiku.visual-check.html",
+      "type": "visual_check_html",
+      "size_bytes": 2000
+    },
+    {
+      "path": "generated/hai-mcp.architecture.haiku.visual-check.json",
+      "name": "hai-mcp.architecture.haiku.visual-check.json",
+      "type": "data",
+      "size_bytes": 17066
+    },
+    {
+      "path": "generated/hai-mcp.architecture.html",
+      "name": "hai-mcp.architecture.html",
+      "type": "archify_html",
+      "size_bytes": 813951
+    },
+    {
+      "path": "generated/hai-mcp.architecture.json",
+      "name": "hai-mcp.architecture.json",
+      "type": "data",
+      "size_bytes": 6324
+    },
+    {
+      "path": "generated/hai-mcp.architecture.mimo.html",
+      "name": "hai-mcp.architecture.mimo.html",
+      "type": "archify_html",
+      "size_bytes": 816418
+    },
+    {
+      "path": "generated/hai-mcp.architecture.mimo.json",
+      "name": "hai-mcp.architecture.mimo.json",
+      "type": "data",
+      "size_bytes": 8478
+    },
+    {
+      "path": "generated/hai-mcp.architecture.mimo.visual-check.1440x900.dark.png",
+      "name": "hai-mcp.architecture.mimo.visual-check.1440x900.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 134898
+    },
+    {
+      "path": "generated/hai-mcp.architecture.mimo.visual-check.1440x900.light.png",
+      "name": "hai-mcp.architecture.mimo.visual-check.1440x900.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 147307
+    },
+    {
+      "path": "generated/hai-mcp.architecture.mimo.visual-check.2048x1320.dark.png",
+      "name": "hai-mcp.architecture.mimo.visual-check.2048x1320.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 185932
+    },
+    {
+      "path": "generated/hai-mcp.architecture.mimo.visual-check.2048x1320.light.png",
+      "name": "hai-mcp.architecture.mimo.visual-check.2048x1320.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 206178
+    },
+    {
+      "path": "generated/hai-mcp.architecture.mimo.visual-check.html",
+      "name": "hai-mcp.architecture.mimo.visual-check.html",
+      "type": "visual_check_html",
+      "size_bytes": 1994
+    },
+    {
+      "path": "generated/hai-mcp.architecture.mimo.visual-check.json",
+      "name": "hai-mcp.architecture.mimo.visual-check.json",
+      "type": "data",
+      "size_bytes": 17250
+    },
+    {
+      "path": "generated/hai-mcp.architecture.minimax.html",
+      "name": "hai-mcp.architecture.minimax.html",
+      "type": "archify_html",
+      "size_bytes": 821234
+    },
+    {
+      "path": "generated/hai-mcp.architecture.minimax.json",
+      "name": "hai-mcp.architecture.minimax.json",
+      "type": "data",
+      "size_bytes": 8905
+    },
+    {
+      "path": "generated/hai-mcp.architecture.minimax.visual-check.1440x900.dark.png",
+      "name": "hai-mcp.architecture.minimax.visual-check.1440x900.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 137346
+    },
+    {
+      "path": "generated/hai-mcp.architecture.minimax.visual-check.1440x900.light.png",
+      "name": "hai-mcp.architecture.minimax.visual-check.1440x900.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 134383
+    },
+    {
+      "path": "generated/hai-mcp.architecture.minimax.visual-check.2048x1320.dark.png",
+      "name": "hai-mcp.architecture.minimax.visual-check.2048x1320.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 189495
+    },
+    {
+      "path": "generated/hai-mcp.architecture.minimax.visual-check.2048x1320.light.png",
+      "name": "hai-mcp.architecture.minimax.visual-check.2048x1320.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 187166
+    },
+    {
+      "path": "generated/hai-mcp.architecture.minimax.visual-check.html",
+      "name": "hai-mcp.architecture.minimax.visual-check.html",
+      "type": "visual_check_html",
+      "size_bytes": 2012
+    },
+    {
+      "path": "generated/hai-mcp.architecture.minimax.visual-check.json",
+      "name": "hai-mcp.architecture.minimax.visual-check.json",
+      "type": "data",
+      "size_bytes": 17194
+    },
+    {
+      "path": "generated/hai-mcp.architecture.muse.html",
+      "name": "hai-mcp.architecture.muse.html",
+      "type": "archify_html",
+      "size_bytes": 816112
+    },
+    {
+      "path": "generated/hai-mcp.architecture.muse.json",
+      "name": "hai-mcp.architecture.muse.json",
+      "type": "data",
+      "size_bytes": 5593
+    },
+    {
+      "path": "generated/hai-mcp.architecture.muse.visual-check.1440x900.dark.png",
+      "name": "hai-mcp.architecture.muse.visual-check.1440x900.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 141508
+    },
+    {
+      "path": "generated/hai-mcp.architecture.muse.visual-check.1440x900.light.png",
+      "name": "hai-mcp.architecture.muse.visual-check.1440x900.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 152695
+    },
+    {
+      "path": "generated/hai-mcp.architecture.muse.visual-check.2048x1320.dark.png",
+      "name": "hai-mcp.architecture.muse.visual-check.2048x1320.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 171252
+    },
+    {
+      "path": "generated/hai-mcp.architecture.muse.visual-check.2048x1320.light.png",
+      "name": "hai-mcp.architecture.muse.visual-check.2048x1320.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 189048
+    },
+    {
+      "path": "generated/hai-mcp.architecture.muse.visual-check.html",
+      "name": "hai-mcp.architecture.muse.visual-check.html",
+      "type": "visual_check_html",
+      "size_bytes": 1994
+    },
+    {
+      "path": "generated/hai-mcp.architecture.muse.visual-check.json",
+      "name": "hai-mcp.architecture.muse.visual-check.json",
+      "type": "data",
+      "size_bytes": 17344
+    },
+    {
+      "path": "generated/hai-mcp.architecture.nemoultra.json",
+      "name": "hai-mcp.architecture.nemoultra.json",
+      "type": "data",
+      "size_bytes": 11193
+    },
+    {
+      "path": "generated/hai-mcp.architecture.opus.html",
+      "name": "hai-mcp.architecture.opus.html",
+      "type": "archify_html",
+      "size_bytes": 820228
+    },
+    {
+      "path": "generated/hai-mcp.architecture.opus.json",
+      "name": "hai-mcp.architecture.opus.json",
+      "type": "data",
+      "size_bytes": 10221
+    },
+    {
+      "path": "generated/hai-mcp.architecture.opus.visual-check.1440x900.dark.png",
+      "name": "hai-mcp.architecture.opus.visual-check.1440x900.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 155213
+    },
+    {
+      "path": "generated/hai-mcp.architecture.opus.visual-check.1440x900.light.png",
+      "name": "hai-mcp.architecture.opus.visual-check.1440x900.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 167551
+    },
+    {
+      "path": "generated/hai-mcp.architecture.opus.visual-check.2048x1320.dark.png",
+      "name": "hai-mcp.architecture.opus.visual-check.2048x1320.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 217781
+    },
+    {
+      "path": "generated/hai-mcp.architecture.opus.visual-check.2048x1320.light.png",
+      "name": "hai-mcp.architecture.opus.visual-check.2048x1320.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 236555
+    },
+    {
+      "path": "generated/hai-mcp.architecture.opus.visual-check.html",
+      "name": "hai-mcp.architecture.opus.visual-check.html",
+      "type": "visual_check_html",
+      "size_bytes": 1994
+    },
+    {
+      "path": "generated/hai-mcp.architecture.opus.visual-check.json",
+      "name": "hai-mcp.architecture.opus.visual-check.json",
+      "type": "data",
+      "size_bytes": 17336
+    },
+    {
+      "path": "generated/hai-mcp.architecture.visual-check.1440x900.dark.png",
+      "name": "hai-mcp.architecture.visual-check.1440x900.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 137036
+    },
+    {
+      "path": "generated/hai-mcp.architecture.visual-check.1440x900.light.png",
+      "name": "hai-mcp.architecture.visual-check.1440x900.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 149144
+    },
+    {
+      "path": "generated/hai-mcp.architecture.visual-check.2048x1320.dark.png",
+      "name": "hai-mcp.architecture.visual-check.2048x1320.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 180598
+    },
+    {
+      "path": "generated/hai-mcp.architecture.visual-check.2048x1320.light.png",
+      "name": "hai-mcp.architecture.visual-check.2048x1320.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 197244
+    },
+    {
+      "path": "generated/hai-mcp.architecture.visual-check.html",
+      "name": "hai-mcp.architecture.visual-check.html",
+      "type": "visual_check_html",
+      "size_bytes": 1964
+    },
+    {
+      "path": "generated/hai-mcp.architecture.visual-check.json",
+      "name": "hai-mcp.architecture.visual-check.json",
+      "type": "data",
+      "size_bytes": 17098
+    },
+    {
+      "path": "generated/hai-mcp.claims.md",
+      "name": "hai-mcp.claims.md",
+      "type": "claims",
+      "size_bytes": 10028
+    },
+    {
+      "path": "generated/hai-mcp.composer-input.md",
+      "name": "hai-mcp.composer-input.md",
+      "type": "claims",
+      "size_bytes": 4373
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.ling-3.0-flash-fin.html",
+      "name": "hai-tiktok.architecture.ling-3.0-flash-fin.html",
+      "type": "archify_html",
+      "size_bytes": 810272
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.ling-3.0-flash-fin.json",
+      "name": "hai-tiktok.architecture.ling-3.0-flash-fin.json",
+      "type": "data",
+      "size_bytes": 8351
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.ling-3.0-flash-fin.visual-check.1440x900.dark.png",
+      "name": "hai-tiktok.architecture.ling-3.0-flash-fin.visual-check.1440x900.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 92067
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.ling-3.0-flash-fin.visual-check.1440x900.light.png",
+      "name": "hai-tiktok.architecture.ling-3.0-flash-fin.visual-check.1440x900.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 106556
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.ling-3.0-flash-fin.visual-check.2048x1320.dark.png",
+      "name": "hai-tiktok.architecture.ling-3.0-flash-fin.visual-check.2048x1320.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 127293
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.ling-3.0-flash-fin.visual-check.2048x1320.light.png",
+      "name": "hai-tiktok.architecture.ling-3.0-flash-fin.visual-check.2048x1320.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 144290
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.ling-3.0-flash-fin.visual-check.html",
+      "name": "hai-tiktok.architecture.ling-3.0-flash-fin.visual-check.html",
+      "type": "visual_check_html",
+      "size_bytes": 2096
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.ling-3.0-flash-fin.visual-check.json",
+      "name": "hai-tiktok.architecture.ling-3.0-flash-fin.visual-check.json",
+      "type": "data",
+      "size_bytes": 21724
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.mimo-v2.5.html",
+      "name": "hai-tiktok.architecture.mimo-v2.5.html",
+      "type": "archify_html",
+      "size_bytes": 809087
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.mimo-v2.5.json",
+      "name": "hai-tiktok.architecture.mimo-v2.5.json",
+      "type": "data",
+      "size_bytes": 6016
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.mimo-v2.5.visual-check.1440x900.dark.png",
+      "name": "hai-tiktok.architecture.mimo-v2.5.visual-check.1440x900.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 108499
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.mimo-v2.5.visual-check.1440x900.light.png",
+      "name": "hai-tiktok.architecture.mimo-v2.5.visual-check.1440x900.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 121233
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.mimo-v2.5.visual-check.2048x1320.dark.png",
+      "name": "hai-tiktok.architecture.mimo-v2.5.visual-check.2048x1320.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 146576
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.mimo-v2.5.visual-check.2048x1320.light.png",
+      "name": "hai-tiktok.architecture.mimo-v2.5.visual-check.2048x1320.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 165973
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.mimo-v2.5.visual-check.html",
+      "name": "hai-tiktok.architecture.mimo-v2.5.visual-check.html",
+      "type": "visual_check_html",
+      "size_bytes": 2042
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.mimo-v2.5.visual-check.json",
+      "name": "hai-tiktok.architecture.mimo-v2.5.visual-check.json",
+      "type": "data",
+      "size_bytes": 17122
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.muse-spark-1.2.html",
+      "name": "hai-tiktok.architecture.muse-spark-1.2.html",
+      "type": "archify_html",
+      "size_bytes": 821217
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.muse-spark-1.2.json",
+      "name": "hai-tiktok.architecture.muse-spark-1.2.json",
+      "type": "data",
+      "size_bytes": 9165
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.muse-spark-1.2.visual-check.1440x900.dark.png",
+      "name": "hai-tiktok.architecture.muse-spark-1.2.visual-check.1440x900.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 174155
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.muse-spark-1.2.visual-check.1440x900.light.png",
+      "name": "hai-tiktok.architecture.muse-spark-1.2.visual-check.1440x900.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 186494
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.muse-spark-1.2.visual-check.2048x1320.dark.png",
+      "name": "hai-tiktok.architecture.muse-spark-1.2.visual-check.2048x1320.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 236445
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.muse-spark-1.2.visual-check.2048x1320.light.png",
+      "name": "hai-tiktok.architecture.muse-spark-1.2.visual-check.2048x1320.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 255901
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.muse-spark-1.2.visual-check.html",
+      "name": "hai-tiktok.architecture.muse-spark-1.2.visual-check.html",
+      "type": "visual_check_html",
+      "size_bytes": 2072
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.muse-spark-1.2.visual-check.json",
+      "name": "hai-tiktok.architecture.muse-spark-1.2.visual-check.json",
+      "type": "data",
+      "size_bytes": 17344
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.muse-spark-1.3.html",
+      "name": "hai-tiktok.architecture.muse-spark-1.3.html",
+      "type": "archify_html",
+      "size_bytes": 821151
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.muse-spark-1.3.json",
+      "name": "hai-tiktok.architecture.muse-spark-1.3.json",
+      "type": "data",
+      "size_bytes": 6833
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.muse-spark-1.3.visual-check.1440x900.dark.png",
+      "name": "hai-tiktok.architecture.muse-spark-1.3.visual-check.1440x900.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 131542
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.muse-spark-1.3.visual-check.1440x900.light.png",
+      "name": "hai-tiktok.architecture.muse-spark-1.3.visual-check.1440x900.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 145378
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.muse-spark-1.3.visual-check.2048x1320.dark.png",
+      "name": "hai-tiktok.architecture.muse-spark-1.3.visual-check.2048x1320.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 179732
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.muse-spark-1.3.visual-check.2048x1320.light.png",
+      "name": "hai-tiktok.architecture.muse-spark-1.3.visual-check.2048x1320.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 196942
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.muse-spark-1.3.visual-check.html",
+      "name": "hai-tiktok.architecture.muse-spark-1.3.visual-check.html",
+      "type": "visual_check_html",
+      "size_bytes": 2072
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.muse-spark-1.3.visual-check.json",
+      "name": "hai-tiktok.architecture.muse-spark-1.3.visual-check.json",
+      "type": "data",
+      "size_bytes": 21716
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.nemotron-3-ultra.json",
+      "name": "hai-tiktok.architecture.nemotron-3-ultra.json",
+      "type": "data",
+      "size_bytes": 8613
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.nemotron-3.5-lightning.json",
+      "name": "hai-tiktok.architecture.nemotron-3.5-lightning.json",
+      "type": "data",
+      "size_bytes": 6274
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.opus.html",
+      "name": "hai-tiktok.architecture.opus.html",
+      "type": "archify_html",
+      "size_bytes": 821691
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.opus.json",
+      "name": "hai-tiktok.architecture.opus.json",
+      "type": "data",
+      "size_bytes": 12562
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.opus.visual-check.1440x900.dark.png",
+      "name": "hai-tiktok.architecture.opus.visual-check.1440x900.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 162109
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.opus.visual-check.1440x900.light.png",
+      "name": "hai-tiktok.architecture.opus.visual-check.1440x900.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 174338
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.opus.visual-check.2048x1320.dark.png",
+      "name": "hai-tiktok.architecture.opus.visual-check.2048x1320.dark.png",
+      "type": "visual_check_image",
+      "size_bytes": 211853
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.opus.visual-check.2048x1320.light.png",
+      "name": "hai-tiktok.architecture.opus.visual-check.2048x1320.light.png",
+      "type": "visual_check_image",
+      "size_bytes": 229309
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.opus.visual-check.html",
+      "name": "hai-tiktok.architecture.opus.visual-check.html",
+      "type": "visual_check_html",
+      "size_bytes": 2012
+    },
+    {
+      "path": "generated/hai-tiktok.architecture.opus.visual-check.json",
+      "name": "hai-tiktok.architecture.opus.visual-check.json",
+      "type": "data",
+      "size_bytes": 17184
+    },
+    {
+      "path": "generated/hai-tiktok.candidate.json",
+      "name": "hai-tiktok.candidate.json",
+      "type": "data",
+      "size_bytes": 8351
+    },
+    {
+      "path": "generated/hai-tiktok.claims.md",
+      "name": "hai-tiktok.claims.md",
+      "type": "claims",
+      "size_bytes": 14776
+    }
+  ]
+}

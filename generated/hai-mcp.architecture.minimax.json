@@ -1,0 +1,313 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "hai-mcp — fail-closed contract kernel",
+    "quality_profile": "showcase",
+    "viewBox": [1320, 760],
+    "repository": {
+      "url": "https://github.com/smlfg/hai-mcp",
+      "provider": "github",
+      "revision": "d31d0a38d1f1089aceb9dba2ab50c0137dfe238f"
+    },
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": { "label": "Out of process" },
+        "backend": { "label": "Process / module" },
+        "security": { "label": "Trust gate" },
+        "database": { "label": "Durable state" }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "mcp-client",
+      "type": "external",
+      "label": "MCP client",
+      "sublabel": "Agent / harness",
+      "pos": [80, 40],
+      "size": [170, 72],
+      "sources": [
+        { "path": "src/hai_mcp/server.py", "label": "tool surface" },
+        { "path": "src/hai_mcp/http_transport.py", "line": 36, "label": "bearer middleware" }
+      ]
+    },
+    {
+      "id": "mcp-server",
+      "type": "backend",
+      "label": "FastMCP server",
+      "sublabel": "stdio | streamable-http",
+      "pos": [80, 150],
+      "size": [170, 72],
+      "sources": [
+        { "path": "src/hai_mcp/server.py", "line": 16, "label": "FastMCP instance" },
+        { "path": "src/hai_mcp/server.py", "line": 429, "label": "main + transport" }
+      ]
+    },
+    {
+      "id": "control-plane",
+      "type": "backend",
+      "label": "ControlPlane",
+      "sublabel": "tool routing + daily loop",
+      "pos": [80, 260],
+      "size": [170, 72],
+      "sources": [
+        { "path": "src/hai_mcp/state.py", "line": 45, "label": "ControlPlane class" },
+        { "path": "src/hai_mcp/server.py", "line": 21, "label": "lazy singleton" }
+      ]
+    },
+    {
+      "id": "active-context",
+      "type": "database",
+      "label": "ACTIVE_CONTEXT",
+      "sublabel": "focus + lanes (max 2)",
+      "pos": [360, 260],
+      "size": [170, 72],
+      "sources": [
+        { "path": "src/hai_mcp/state.py", "line": 53, "label": "active_path" },
+        { "path": "src/hai_mcp/state.py", "line": 76, "label": "load_active" }
+      ]
+    },
+    {
+      "id": "mission-engine",
+      "type": "backend",
+      "label": "MissionEngine",
+      "sublabel": "canonical mutation authority",
+      "pos": [80, 370],
+      "size": [170, 72],
+      "sources": [
+        { "path": "src/hai_mcp/mission.py", "line": 99, "label": "MissionEngine class" },
+        { "path": "src/hai_mcp/mission.py", "line": 174, "label": "append_audit" }
+      ]
+    },
+    {
+      "id": "owner-gate",
+      "type": "security",
+      "label": "OwnerGate",
+      "sublabel": "challenge / nonce gate",
+      "pos": [360, 370],
+      "size": [170, 72],
+      "sources": [
+        { "path": "src/hai_mcp/owner_gate.py", "line": 191, "label": "OwnerGate class" },
+        { "path": "src/hai_mcp/owner_gate.py", "line": 354, "label": "require()" }
+      ]
+    },
+    {
+      "id": "owner-channel",
+      "type": "external",
+      "label": "Owner channel",
+      "sublabel": "file 0700 | ntfy push",
+      "pos": [600, 370],
+      "size": [170, 72],
+      "sources": [
+        { "path": "src/hai_mcp/owner_gate.py", "line": 119, "label": "FileOwnerChannel" },
+        { "path": "src/hai_mcp/owner_gate.py", "line": 148, "label": "NtfyOwnerChannel" }
+      ]
+    },
+    {
+      "id": "audit-chain",
+      "type": "database",
+      "label": "Audit chain",
+      "sublabel": "audit/A-*.json + HEAD hash",
+      "pos": [840, 370],
+      "size": [170, 72],
+      "sources": [
+        { "path": "src/hai_mcp/mission.py", "line": 174, "label": "append_audit" },
+        { "path": "src/hai_mcp/mission.py", "line": 122, "label": "audit_head_path" }
+      ]
+    },
+    {
+      "id": "projects-registry",
+      "type": "database",
+      "label": "Projects registry",
+      "sublabel": "logical project_id → mount",
+      "pos": [1080, 370],
+      "size": [170, 72],
+      "sources": [
+        { "path": "src/hai_mcp/projects.py", "line": 30, "label": "ProjectStore" },
+        { "path": "src/hai_mcp/projects.py", "line": 44, "label": "get_mount_path" }
+      ]
+    },
+    {
+      "id": "mission-lock",
+      "type": "security",
+      "label": "mission_state_lock",
+      "sublabel": "fcntl .mission.lock",
+      "pos": [80, 480],
+      "size": [170, 72],
+      "sources": [
+        { "path": "src/hai_mcp/locking.py", "line": 14, "label": "LOCK_EX / LOCK_UN" },
+        { "path": "src/hai_mcp/locking.py", "line": 19, "label": ".mission.lock path" }
+      ]
+    },
+    {
+      "id": "project-fs",
+      "type": "external",
+      "label": "Project FS",
+      "sublabel": "user paths + evidence",
+      "pos": [1080, 510],
+      "size": [170, 72],
+      "sources": [
+        { "path": "src/hai_mcp/mission.py", "line": 1360, "label": "_verify_evidence_path" },
+        { "path": "src/hai_mcp/paths.py", "line": 56, "label": "real_path + assert_under" }
+      ]
+    },
+    {
+      "id": "contracts-store",
+      "type": "database",
+      "label": "Contracts + leases",
+      "sublabel": "M-*/contracts, sessions",
+      "pos": [80, 590],
+      "size": [170, 72],
+      "sources": [
+        { "path": "src/hai_mcp/mission.py", "line": 246, "label": "contract_path" },
+        { "path": "src/hai_mcp/storage.py", "line": 33, "label": "atomic write_json" }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Contract Kernel — single-writer",
+      "wraps": [
+        "control-plane",
+        "mission-engine",
+        "mission-lock",
+        "contracts-store",
+        "audit-chain",
+        "active-context",
+        "projects-registry"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "Owner channel — out of band",
+      "wraps": ["owner-channel"]
+    },
+    {
+      "kind": "security-group",
+      "label": "Mounted project — agent readable",
+      "wraps": ["project-fs"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "call",
+      "from": "mcp-client",
+      "to": "mcp-server",
+      "label": "tools/call",
+      "variant": "emphasis",
+      "labelDy": 18
+    },
+    {
+      "id": "dispatch",
+      "from": "mcp-server",
+      "to": "control-plane",
+      "label": "delegate",
+      "labelDy": 18
+    },
+    {
+      "id": "mission-ops",
+      "from": "control-plane",
+      "to": "mission-engine",
+      "label": "open / authorize / close",
+      "labelDy": 18
+    },
+    {
+      "id": "active-rw",
+      "from": "control-plane",
+      "to": "active-context",
+      "label": "load / save"
+    },
+    {
+      "id": "gate",
+      "from": "mission-engine",
+      "to": "owner-gate",
+      "label": "require",
+      "variant": "security",
+      "labelAt": [275, 390]
+    },
+    {
+      "id": "deliver",
+      "from": "owner-gate",
+      "to": "owner-channel",
+      "label": "deliver code",
+      "variant": "security"
+    },
+    {
+      "id": "audit-append",
+      "from": "mission-engine",
+      "to": "audit-chain",
+      "label": "seq + prev_hash",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "bottom",
+      "via": [[310, 406], [310, 458], [925, 458], [925, 442]],
+      "labelAt": [250, 466]
+    },
+    {
+      "id": "mount-lookup",
+      "from": "mission-engine",
+      "to": "projects-registry",
+      "label": "resolve mount",
+      "fromSide": "right",
+      "toSide": "bottom",
+      "via": [[330, 406], [330, 478], [1165, 478], [1165, 442]],
+      "labelAt": [750, 488]
+    },
+    {
+      "id": "mount-resolve",
+      "from": "projects-registry",
+      "to": "project-fs",
+      "label": "real_path",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDx": 40,
+      "labelDy": 18
+    },
+    {
+      "id": "flock",
+      "from": "mission-engine",
+      "to": "mission-lock",
+      "label": "LOCK_EX",
+      "labelDy": 24
+    },
+    {
+      "id": "write-contract",
+      "from": "mission-lock",
+      "to": "contracts-store",
+      "label": "atomic write",
+      "labelDy": 18
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "One process, one writer",
+      "items": [
+        "MissionEngine is the canonical mutation authority",
+        "fcntl flock serializes every state change under HAI_HOME",
+        "Audit chain stores seq + prev_hash for tamper evidence"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Owner is a separate principal",
+      "items": [
+        "Owner code is delivered off-band (file 0700 or ntfy push)",
+        "HAI_HOME stores only the salted SHA-256 of the code",
+        "Plaintext code never outlives delivery"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Project paths are confined",
+      "items": [
+        "logical project_id resolves via per-device mount table",
+        "Evidence checks require SHA-256 inside the project root",
+        "Symlink-safe assert_under rejects escapes before any read"
+      ]
+    }
+  ]
+}

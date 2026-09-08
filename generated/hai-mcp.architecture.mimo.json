@@ -1,0 +1,346 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HAI-MCP Control-Plane Server",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/smlfg/hai-mcp.git",
+      "provider": "github",
+      "revision": "d31d0a38d1f1089aceb9dba2ab50c0137dfe238f"
+    },
+    "views": [
+      {
+        "id": "main-flow",
+        "label": "Request lifecycle",
+        "focus": ["client", "mcp", "controlplane", "mission", "filesystem"],
+        "note": "Follow an MCP tool call from agent through validation to filesystem state."
+      },
+      {
+        "id": "owner-gate",
+        "label": "Owner gate flow",
+        "focus": ["controlplane", "mission", "ownergate", "transport"],
+        "note": "Nonce challenge/response for human-gated actions like accept_next_step."
+      },
+      {
+        "id": "session-lease",
+        "label": "Session lease lifecycle",
+        "focus": ["client", "mcp", "controlplane", "mission", "pathsecurity"],
+        "note": "Agent session authorization, contract verification, and drift detection."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "client",
+      "type": "external",
+      "label": "MCP Client",
+      "sublabel": "Agent / Harness",
+      "pos": [40, 260],
+      "size": [120, 56],
+      "sources": [
+        {
+          "path": "README.md",
+          "label": "MCP client overview"
+        }
+      ]
+    },
+    {
+      "id": "mcp",
+      "type": "backend",
+      "label": "FastMCP Server",
+      "sublabel": "Tool dispatch + transport",
+      "tag": "stdio / streamable-http",
+      "pos": [220, 260],
+      "size": [150, 56],
+      "sources": [
+        {
+          "path": "src/hai_mcp/server.py",
+          "line": 9,
+          "label": "FastMCP(SERVER_NAME) init"
+        },
+        {
+          "path": "src/hai_mcp/server.py",
+          "line": 429,
+          "label": "main() transport selection"
+        }
+      ]
+    },
+    {
+      "id": "transport",
+      "type": "security",
+      "label": "HTTP Transport",
+      "sublabel": "Bearer token auth",
+      "pos": [220, 440],
+      "size": [140, 50],
+      "sources": [
+        {
+          "path": "src/hai_mcp/http_transport.py",
+          "line": 10,
+          "label": "http_bind_allowed()"
+        },
+        {
+          "path": "src/hai_mcp/http_transport.py",
+          "line": 36,
+          "label": "wrap_with_bearer_token()"
+        }
+      ]
+    },
+    {
+      "id": "config",
+      "type": "cloud",
+      "label": "Config",
+      "sublabel": "Env-driven settings",
+      "pos": [480, 100],
+      "size": [130, 50],
+      "sources": [
+        {
+          "path": "src/hai_mcp/config.py",
+          "line": 21,
+          "label": "Config dataclass"
+        },
+        {
+          "path": "src/hai_mcp/config.py",
+          "line": 35,
+          "label": "Config.from_env()"
+        }
+      ]
+    },
+    {
+      "id": "controlplane",
+      "type": "backend",
+      "label": "ControlPlane",
+      "sublabel": "Central orchestrator",
+      "pos": [480, 260],
+      "size": [150, 60],
+      "sources": [
+        {
+          "path": "src/hai_mcp/state.py",
+          "line": 45,
+          "label": "ControlPlane dataclass"
+        },
+        {
+          "path": "src/hai_mcp/state.py",
+          "line": 76,
+          "label": "load_active() JSON state"
+        }
+      ]
+    },
+    {
+      "id": "mission",
+      "type": "backend",
+      "label": "MissionEngine",
+      "sublabel": "Contracts, sessions, criteria",
+      "pos": [720, 260],
+      "size": [160, 60],
+      "sources": [
+        {
+          "path": "src/hai_mcp/mission.py",
+          "line": 98,
+          "label": "MissionEngine dataclass"
+        },
+        {
+          "path": "src/hai_mcp/mission.py",
+          "line": 402,
+          "label": "open_mission()"
+        },
+        {
+          "path": "src/hai_mcp/mission.py",
+          "line": 912,
+          "label": "check_activity() drift classifier"
+        }
+      ]
+    },
+    {
+      "id": "ownergate",
+      "type": "security",
+      "label": "OwnerGate",
+      "sublabel": "Challenge/response approval",
+      "tag": "nonce | presence | ack_legacy",
+      "pos": [720, 100],
+      "size": [160, 56],
+      "sources": [
+        {
+          "path": "src/hai_mcp/owner_gate.py",
+          "line": 191,
+          "label": "OwnerGate dataclass"
+        },
+        {
+          "path": "src/hai_mcp/owner_gate.py",
+          "line": 354,
+          "label": "require() gate entry"
+        }
+      ]
+    },
+    {
+      "id": "pathsecurity",
+      "type": "security",
+      "label": "PathSecurity",
+      "sublabel": "Symlink-safe validation",
+      "pos": [480, 440],
+      "size": [140, 50],
+      "sources": [
+        {
+          "path": "src/hai_mcp/paths.py",
+          "line": 76,
+          "label": "assert_under()"
+        },
+        {
+          "path": "src/hai_mcp/paths.py",
+          "line": 47,
+          "label": "confined_artifact_dir()"
+        }
+      ]
+    },
+    {
+      "id": "storage",
+      "type": "database",
+      "label": "Atomic Storage",
+      "sublabel": "fsync + replace writes",
+      "pos": [960, 260],
+      "size": [130, 50],
+      "sources": [
+        {
+          "path": "src/hai_mcp/storage.py",
+          "line": 10,
+          "label": "atomic_write_text()"
+        }
+      ]
+    },
+    {
+      "id": "filesystem",
+      "type": "database",
+      "label": "HAI_HOME Filesystem",
+      "sublabel": "~/.hai/",
+      "tag": "JSON + Markdown",
+      "pos": [960, 130],
+      "size": [140, 56],
+      "sources": [
+        {
+          "path": "src/hai_mcp/state.py",
+          "line": 53,
+          "label": "ACTIVE_CONTEXT.json path"
+        },
+        {
+          "path": "src/hai_mcp/state.py",
+          "line": 56,
+          "label": "inbox/ directory"
+        },
+        {
+          "path": "src/hai_mcp/config.py",
+          "line": 83,
+          "label": "ensure_hai_home() dirs"
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Owner Trust Boundary",
+      "wraps": ["ownergate"],
+      "pad": 12
+    },
+    {
+      "kind": "region",
+      "label": "HAI Home",
+      "wraps": ["controlplane", "mission", "pathsecurity", "storage", "filesystem"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "c-mcp",
+      "from": "client",
+      "to": "mcp",
+      "label": "MCP tool call",
+      "fromSide": "right",
+      "toSide": "left",
+      "variant": "emphasis",
+      "labelAt": [190, 330]
+    },
+    {
+      "id": "mcp-cp",
+      "from": "mcp",
+      "to": "controlplane",
+      "label": "dispatch",
+      "fromSide": "right",
+      "toSide": "left",
+      "labelAt": [430, 330]
+    },
+    {
+      "id": "mcp-http",
+      "from": "mcp",
+      "to": "transport",
+      "label": "bearer auth",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "variant": "security"
+    },
+    {
+      "id": "cp-config",
+      "from": "config",
+      "to": "controlplane",
+      "label": "Config.from_env()",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "variant": "dashed"
+    },
+    {
+      "id": "cp-mission",
+      "from": "controlplane",
+      "to": "mission",
+      "label": "delegate",
+      "fromSide": "right",
+      "toSide": "left",
+      "variant": "emphasis",
+      "labelAt": [680, 330]
+    },
+    {
+      "id": "mission-gate",
+      "from": "mission",
+      "to": "ownergate",
+      "label": "require()",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "variant": "security"
+    },
+    {
+      "id": "cp-paths",
+      "from": "controlplane",
+      "to": "pathsecurity",
+      "label": "assert_under()",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "mission-storage",
+      "from": "mission",
+      "to": "storage",
+      "label": "write_json()",
+      "fromSide": "right",
+      "toSide": "left",
+      "labelAt": [920, 330]
+    },
+    {
+      "id": "storage-fs",
+      "from": "storage",
+      "to": "filesystem",
+      "label": "atomic fsync",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Entry",
+      "items": ["FastMCP dispatches ~20 tools via stdio or streamable-http", "Bearer token auth for non-loopback HTTP binds"]
+    },
+    {
+      "dot": "emerald",
+      "title": "Engine",
+      "items": ["ControlPlane + MissionEngine manage contracts, sessions, and drift detection", "One active mission, max 2 lanes, owner-gated actions"]
+    }
+  ]
+}

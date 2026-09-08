@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "codex-archify-experiment",
+    "subtitle": "Multi-LLM Scout Pipeline → Composer → Archify Visualization",
+    "output": "cae.architecture.mimo-v2.5.html",
+    "quality_profile": "showcase",
+    "viewBox": [1160, 600],
+    "views": [
+      { "id": "main-pipeline", "label": "Main pipeline", "focus": ["cli", "runner", "evidence", "scout", "orchestrator", "composer"], "note": "Follow the primary path from CLI entry through model dispatch to composed output." },
+      { "id": "simple-path", "label": "Simple path", "focus": ["cli", "runner", "evidence", "simple", "composer"], "note": "The lightweight alternative: text-mode scouts, one composer call, markdown report." },
+      { "id": "delivery", "label": "Delivery & validation", "focus": ["composer", "archify", "browser"], "note": "Schema validation, HTML rendering, and headless browser check." }
+    ]
+  },
+  "components": [
+    { "id": "cli", "type": "frontend", "label": "CLI Entry", "sublabel": "bin/archify-project", "tag": "argparse", "pos": [40, 260], "size": [140, 56] },
+    { "id": "runner", "type": "backend", "label": "OpenCode Runner", "sublabel": "runner.py :54-128", "tag": "subprocess", "pos": [260, 260], "size": [160, 56] },
+    { "id": "evidence", "type": "database", "label": "Evidence Layer", "sublabel": "evidence.py", "tag": "snapshot + validation", "pos": [260, 420], "size": [160, 56] },
+    { "id": "scout", "type": "backend", "label": "Scout Pipeline", "sublabel": "pipeline.py :31-72", "tag": "6× parallel", "pos": [520, 200], "size": [160, 56] },
+    { "id": "orchestrator", "type": "backend", "label": "Arm Orchestrator", "sublabel": "pipeline.py :114-195", "tag": "parallel merge", "pos": [520, 360], "size": [160, 56] },
+    { "id": "composer", "type": "backend", "label": "Composer", "sublabel": "composer.py :142-192", "tag": "GPT-6-Astra", "pos": [760, 260], "size": [160, 56] },
+    { "id": "simple", "type": "backend", "label": "Simple Path", "sublabel": "simple.py :10-84", "tag": "text mode", "pos": [520, 520], "size": [160, 56] },
+    { "id": "archify", "type": "external", "label": "Archify CLI", "sublabel": "archify.mjs", "tag": "Node.js", "pos": [1000, 260], "size": [140, 56] },
+    { "id": "browser", "type": "external", "label": "Browser Check", "sublabel": "headless Chrome", "tag": "viewport", "pos": [1000, 420], "size": [140, 56] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Trust Sandbox", "wraps": ["runner", "evidence"], "pad": 12 }
+  ],
+  "connections": [
+    { "id": "c-cli-runner", "from": "cli", "to": "runner", "label": "dispatch", "variant": "emphasis", "fromSide": "right", "toSide": "left" },
+    { "id": "c-runner-evidence", "from": "runner", "to": "evidence", "label": "snapshot", "fromSide": "bottom", "toSide": "top", "labelAt": [340, 330] },
+    { "id": "c-runner-scout", "from": "runner", "to": "scout", "label": "6× model call", "fromSide": "right", "toSide": "left", "labelAt": [440, 200] },
+    { "id": "c-scout-orchestrator", "from": "scout", "to": "orchestrator", "label": "claims", "fromSide": "bottom", "toSide": "top", "labelAt": [600, 300] },
+    { "id": "c-orchestrator-composer", "from": "orchestrator", "to": "composer", "label": "merge + compose", "fromSide": "right", "toSide": "left", "labelAt": [680, 270] },
+    { "id": "c-composer-archify", "from": "composer", "to": "archify", "label": "validate + deliver", "fromSide": "right", "toSide": "left", "labelAt": [900, 250] },
+    { "id": "c-archify-browser", "from": "archify", "to": "browser", "label": "visual check", "fromSide": "bottom", "toSide": "top", "labelAt": [1070, 340] },
+    { "id": "c-cli-simple", "from": "cli", "to": "simple", "label": "simple path", "variant": "dashed", "fromSide": "right", "toSide": "left", "labelAt": [300, 530] },
+    { "id": "c-simple-composer", "from": "simple", "to": "composer", "label": "text + compose", "variant": "dashed", "fromSide": "right", "toSide": "left", "labelAt": [640, 510] },
+    { "id": "c-evidence-scout", "from": "evidence", "to": "scout", "label": "chunks", "fromSide": "right", "toSide": "left", "labelAt": [440, 400] }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Entry & Dispatch", "items": ["CLI parses command + project path", "Routes to simple or full pipeline", "Signal handlers for graceful cancel"] },
+    { "dot": "emerald", "title": "Scout Phase", "items": ["6 free models in parallel", "Bounded subprocess via OpenCode", "Claims with line references"] },
+    { "dot": "rose", "title": "Composer & Delivery", "items": ["GPT-6-Astra synthesizes 5-view bundle", "Archify validates schema + renders HTML", "Headless Chrome checks viewport"] }
+  ]
+}

@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Codex-Archify-Experiment — Project Reader",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/smlflg/codex-archify-experiment",
+      "provider": "github",
+      "revision": "b99676615f512e756adc5c41b28dbc7d8edaebf9",
+      "link_mode": "local-only"
+    }
+  },
+  "components": [
+    {
+      "id": "cli",
+      "type": "frontend",
+      "label": "CLI Entry Point",
+      "sublabel": "analyze command",
+      "pos": [40, 180],
+      "size": [140, 70],
+      "sources": [
+        { "path": "codex-archify-experiment/project_reader/cli.py", "line": 12, "end_line": 32, "label": "main() parses args, runs analyze" }
+      ]
+    },
+    {
+      "id": "snapshotter",
+      "type": "backend",
+      "label": "Snapshotter",
+      "sublabel": "git freeze",
+      "pos": [220, 180],
+      "size": [140, 70],
+      "sources": [
+        { "path": "codex-archify-experiment/project_reader/evidence.py", "line": 33, "end_line": 100, "label": "snapshot() freezes project at revision" }
+      ]
+    },
+    {
+      "id": "scout-orchestrator",
+      "type": "backend",
+      "label": "Scout Orchestrator",
+      "sublabel": "6 free models",
+      "pos": [420, 60],
+      "size": [160, 70],
+      "sources": [
+        { "path": "codex-archify-experiment/project_reader/pipeline.py", "line": 31, "end_line": 72, "label": "scout() runs models in parallel" }
+      ]
+    },
+    {
+      "id": "claim-merger",
+      "type": "backend",
+      "label": "Claim Merger",
+      "sublabel": "validated merge",
+      "pos": [420, 180],
+      "size": [160, 70],
+      "sources": [
+        { "path": "codex-archify-experiment/project_reader/evidence.py", "line": 135, "end_line": 183, "label": "merge() validates quotes & deduplicates" }
+      ]
+    },
+    {
+      "id": "composer",
+      "type": "backend",
+      "label": "Composer",
+      "sublabel": "GPT-6-Astra",
+      "pos": [620, 180],
+      "size": [160, 70],
+      "sources": [
+        { "path": "codex-archify-experiment/project_reader/composer.py", "line": 142, "end_line": 191, "label": "compose() builds 5-view bundle" }
+      ]
+    },
+    {
+      "id": "validator",
+      "type": "backend",
+      "label": "Validator",
+      "sublabel": "Archify showcase",
+      "pos": [820, 60],
+      "size": [160, 70],
+      "sources": [
+        { "path": "codex-archify-experiment/project_reader/composer.py", "line": 122, "end_line": 139, "label": "validate_candidates() runs Archify validate" }
+      ]
+    },
+    {
+      "id": "delivery",
+      "type": "backend",
+      "label": "Delivery",
+      "sublabel": "Archify CLI → HTML",
+      "pos": [820, 180],
+      "size": [160, 70],
+      "sources": [
+        { "path": "codex-archify-experiment/project_reader/pipeline.py", "line": 95, "end_line": 111, "label": "deliver() calls Archify deliver" }
+      ]
+    },
+    {
+      "id": "report-generator",
+      "type": "backend",
+      "label": "Report Generator",
+      "sublabel": "static HTML",
+      "pos": [620, 300],
+      "size": [160, 70],
+      "sources": [
+        { "path": "codex-archify-experiment/project_reader/report.py", "line": 32, "end_line": 87, "label": "report() writes index.html + evidence.html" }
+      ]
+    },
+    {
+      "id": "model-runner",
+      "type": "backend",
+      "label": "Model Runner",
+      "sublabel": "OpenCode sandboxed",
+      "pos": [40, 300],
+      "size": [140, 70],
+      "sources": [
+        { "path": "codex-archify-experiment/project_reader/runner.py", "line": 54, "end_line": 128, "label": "OpenCode.call() denies all tools" }
+      ]
+    },
+    {
+      "id": "archify-cli",
+      "type": "external",
+      "label": "Archify CLI",
+      "sublabel": "node bin/archify.mjs",
+      "pos": [1020, 180],
+      "size": [160, 70],
+      "sources": [
+        { "path": "codex-archify-experiment/project_reader/composer.py", "line": 130, "end_line": 131, "label": "subprocess runs validate/deliver" }
+      ]
+    },
+    {
+      "id": "git",
+      "type": "external",
+      "label": "Git",
+      "sublabel": "commit + ls-files",
+      "pos": [220, 300],
+      "size": [140, 70],
+      "sources": [
+        { "path": "codex-archify-experiment/project_reader/evidence.py", "line": 29, "end_line": 30, "label": "git() helper wraps subprocess" }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Model Sandbox",
+      "wraps": ["scout-orchestrator", "composer", "model-runner"],
+      "pad": 8
+    },
+    {
+      "kind": "region",
+      "label": "Local Process",
+      "wraps": ["cli", "snapshotter", "claim-merger", "validator", "delivery", "report-generator"],
+      "pad": 8
+    }
+  ],
+  "connections": [
+    { "id": "cli-to-snapshot", "from": "cli", "to": "snapshotter", "label": "project + ref", "labelDy": -40 },
+    { "id": "snapshot-to-scout", "from": "snapshotter", "to": "scout-orchestrator", "label": "frozen source packets", "labelAt": [392, 144] },
+    { "id": "snapshot-to-git", "from": "snapshotter", "to": "git", "label": "rev-parse + cat-file", "labelDy": 40 },
+    { "id": "runner-to-scout", "from": "model-runner", "to": "scout-orchestrator", "label": "bounded calls", "variant": "security", "labelAt": [788, 144] },
+    { "id": "runner-to-composer", "from": "model-runner", "to": "composer", "label": "bounded calls", "variant": "security", "labelDy": -40 },
+    { "id": "scout-to-merger", "from": "scout-orchestrator", "to": "claim-merger", "label": "raw claims", "labelAt": [507, 144] },
+    { "id": "merger-to-composer", "from": "claim-merger", "to": "composer", "label": "verified claims", "labelDy": -40 },
+    { "id": "composer-to-validator", "from": "composer", "to": "validator", "label": "5 candidates", "labelAt": [797, 144] },
+    { "id": "validator-to-delivery", "from": "validator", "to": "delivery", "label": "validated JSON", "labelAt": [900, 144] },
+    { "id": "delivery-to-archify", "from": "delivery", "to": "archify-cli", "label": "deliver → HTML", "labelDy": -40 },
+    { "id": "composer-to-report", "from": "composer", "to": "report-generator", "label": "bundle + claims", "labelDy": 40 }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Pipeline",
+      "items": [
+        "Git snapshot → 6 parallel scouts → verified claims",
+        "Composer builds 5 Archify views (arch/workflow/seq/dataflow/lifecycle)",
+        "Showcase validation gates every view before delivery"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Trust Boundaries",
+      "items": [
+        "Model Sandbox: all tools denied, source supplied by runner",
+        "Process isolation: each model in own process group",
+        "No model filesystem access — only runner-provided content"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "External Dependencies",
+      "items": [
+        "OpenCode CLI (model invocations)",
+        "Archify CLI (Node.js validate + deliver)",
+        "Git (commit freeze + file enumeration)"
+      ]
+    }
+  ]
+}

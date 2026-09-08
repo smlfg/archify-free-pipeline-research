@@ -1,0 +1,554 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HAI-TIKTOK · Von der Agenten-Session zum Kurzvideo",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1240,
+      520
+    ],
+    "repository": {
+      "url": "https://github.com/smlfg/HAI-TIKTOK",
+      "provider": "github",
+      "revision": "23d1346fe3bb0040add32250b5939f56e46932e0"
+    },
+    "views": [
+      {
+        "id": "hauptpfad",
+        "label": "Hauptpfad: Session zu Video",
+        "focus": [
+          "sessions",
+          "enqueue",
+          "state",
+          "producer",
+          "render",
+          "out",
+          "social"
+        ],
+        "note": "Ein Lauf vom SessionEnd-Hook bis zum Freigabe-Vorschlag an Samuel."
+      },
+      {
+        "id": "engpass",
+        "label": "Engpass Render-Lane",
+        "focus": [
+          "state",
+          "render",
+          "notebooklm",
+          "out",
+          "social"
+        ],
+        "note": "Ein Consumer-Slot, ein Quota-Gate und der lokale Ersatzweg."
+      },
+      {
+        "id": "grenzen",
+        "label": "Vertrauensgrenzen",
+        "focus": [
+          "sessions",
+          "llm",
+          "notebooklm",
+          "samuel",
+          "feed"
+        ],
+        "note": "Wo Session-Text den Host verlaesst und wo ein Mensch entscheidet."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "feed",
+      "type": "frontend",
+      "label": "HAI Feed",
+      "sublabel": "Next.js · SQLite",
+      "tag": "Bearer-Auth",
+      "pos": [
+        40,
+        50
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "sources": [
+        {
+          "path": "src/app/api/v1/posts/route.ts",
+          "line": 80,
+          "end_line": 81,
+          "label": "POST /api/v1/posts"
+        },
+        {
+          "path": "src/lib/auth.ts",
+          "line": 119,
+          "end_line": 120,
+          "label": "Bearer HAI_API_KEY"
+        },
+        {
+          "path": "src/middleware.ts",
+          "line": 6,
+          "label": "Admin-Cookie fuer /upload /ingest"
+        }
+      ]
+    },
+    {
+      "id": "llm",
+      "type": "external",
+      "label": "MiniMax-M3",
+      "sublabel": "via Hermes CLI",
+      "pos": [
+        540,
+        50
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "sources": [
+        {
+          "path": "scripts/hai_tiktok_worker.py",
+          "line": 397,
+          "label": "DISTILL_MODEL"
+        },
+        {
+          "path": "scripts/hai_tiktok_worker.py",
+          "line": 426,
+          "end_line": 432,
+          "label": "script_chat, hermes chat"
+        }
+      ]
+    },
+    {
+      "id": "notebooklm",
+      "type": "external",
+      "label": "NotebookLM",
+      "sublabel": "nlm CLI · Video",
+      "pos": [
+        790,
+        50
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "sources": [
+        {
+          "path": "scripts/hai_tiktok_worker.py",
+          "line": 741,
+          "label": "nlm video create"
+        },
+        {
+          "path": "scripts/hai_tiktok_worker.py",
+          "line": 736,
+          "label": "nlm source add"
+        },
+        {
+          "path": "scripts/hai_tiktok_worker.py",
+          "line": 861,
+          "label": "nlm download video"
+        }
+      ]
+    },
+    {
+      "id": "sessions",
+      "type": "external",
+      "label": "Agenten-Sessions",
+      "sublabel": "Claude/Codex/Hermes",
+      "pos": [
+        40,
+        240
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "sources": [
+        {
+          "path": "scripts/hai_tiktok_enqueue.sh",
+          "line": 3,
+          "label": "SessionEnd-Hook, transcript_path"
+        },
+        {
+          "path": "scripts/hai_tiktok_worker.py",
+          "line": 218,
+          "label": "enqueue_codex_recent"
+        },
+        {
+          "path": "scripts/hai_tiktok_worker.py",
+          "line": 153,
+          "label": "enqueue_hermes_recent"
+        }
+      ]
+    },
+    {
+      "id": "enqueue",
+      "type": "backend",
+      "label": "Enqueue-Hook",
+      "sublabel": "+ Drain-Trigger",
+      "pos": [
+        290,
+        240
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "sources": [
+        {
+          "path": "scripts/hai_tiktok_enqueue.sh",
+          "line": 44,
+          "end_line": 53,
+          "label": "flock-Dedupe, append queue.txt"
+        },
+        {
+          "path": "scripts/hai_tiktok_trigger_if_backlog.sh",
+          "line": 13,
+          "label": "nohup setsid worker --drain"
+        }
+      ]
+    },
+    {
+      "id": "producer",
+      "type": "backend",
+      "label": "Skript-Lane",
+      "sublabel": "3 Varianten + Judge",
+      "tag": "1 Thread",
+      "pos": [
+        540,
+        240
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "sources": [
+        {
+          "path": "scripts/hai_tiktok_worker.py",
+          "line": 463,
+          "label": "distill_variants"
+        },
+        {
+          "path": "scripts/hai_tiktok_worker.py",
+          "line": 529,
+          "label": "judge_variants"
+        },
+        {
+          "path": "scripts/hai_tiktok_pipeline.py",
+          "line": 190,
+          "label": "Coordinator._produce"
+        }
+      ]
+    },
+    {
+      "id": "render",
+      "type": "backend",
+      "label": "Render-Lane",
+      "sublabel": "create → poll → get",
+      "tag": "1 Slot",
+      "pos": [
+        790,
+        240
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "sources": [
+        {
+          "path": "scripts/hai_tiktok_pipeline.py",
+          "line": 352,
+          "end_line": 381,
+          "label": "_start_consumer, ein Slot"
+        },
+        {
+          "path": "scripts/hai_tiktok_pipeline.py",
+          "line": 334,
+          "label": "_consumer_call Phasen"
+        },
+        {
+          "path": "scripts/hai_tiktok_worker.py",
+          "line": 680,
+          "label": "nlm_blocked Quota-Gate"
+        }
+      ]
+    },
+    {
+      "id": "out",
+      "type": "database",
+      "label": "Video-Ausgang",
+      "sublabel": "out/*.mp4 vertikal",
+      "pos": [
+        1040,
+        240
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "sources": [
+        {
+          "path": "scripts/hai_tiktok_worker.py",
+          "line": 864,
+          "label": "to_vertical_1080x1920"
+        },
+        {
+          "path": "scripts/hai_tiktok_worker.py",
+          "line": 869,
+          "end_line": 870,
+          "label": "done.txt Quittung"
+        },
+        {
+          "path": "scripts/hai_tiktok_worker.py",
+          "line": 13,
+          "label": "OUT = ROOT / 'out'"
+        }
+      ]
+    },
+    {
+      "id": "state",
+      "type": "database",
+      "label": "Runtime-State",
+      "sublabel": "queue · inflight",
+      "pos": [
+        290,
+        430
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "sources": [
+        {
+          "path": "scripts/hai_tiktok_worker.py",
+          "line": 12,
+          "end_line": 26,
+          "label": "ROOT, QUEUE, DONE, FAILED"
+        },
+        {
+          "path": "scripts/hai_tiktok_worker.py",
+          "line": 254,
+          "label": "pick_oldest"
+        },
+        {
+          "path": "scripts/hai_tiktok_pipeline.py",
+          "line": 89,
+          "label": "pipeline_status.json"
+        }
+      ]
+    },
+    {
+      "id": "dashboard",
+      "type": "frontend",
+      "label": "Leitstand",
+      "sublabel": "dashboard.html",
+      "pos": [
+        540,
+        430
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "sources": [
+        {
+          "path": "scripts/build_dashboard.py",
+          "line": 338,
+          "end_line": 340,
+          "label": "main, OUT_HTML.write_text"
+        },
+        {
+          "path": "scripts/build_dashboard.py",
+          "line": 63,
+          "label": "collect liest Queue/Done/Failed"
+        },
+        {
+          "path": "scripts/build_dashboard.py",
+          "line": 48,
+          "label": "pending_count via Worker-Logik"
+        }
+      ]
+    },
+    {
+      "id": "social",
+      "type": "backend",
+      "label": "Social-Manager",
+      "sublabel": "Vorschlag an Samuel",
+      "pos": [
+        1040,
+        430
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "sources": [
+        {
+          "path": "scripts/social_manager_propose.py",
+          "line": 142,
+          "label": "OUT.glob('*.mp4')"
+        },
+        {
+          "path": "scripts/social_manager_propose.py",
+          "line": 75,
+          "end_line": 76,
+          "label": "send_telegram, Freigabe-Befehl"
+        },
+        {
+          "path": "scripts/social_manager_propose.py",
+          "line": 96,
+          "label": "record_outcome posted/skipped"
+        }
+      ]
+    },
+    {
+      "id": "samuel",
+      "type": "external",
+      "label": "Samuel",
+      "sublabel": "Telegram-Freigabe",
+      "pos": [
+        790,
+        430
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "sources": [
+        {
+          "path": "scripts/social_manager_propose.py",
+          "line": 76,
+          "label": "Freigabe: social-manager post"
+        },
+        {
+          "path": "scripts/social_manager_propose.py",
+          "line": 156,
+          "label": "pending.txt bis zur Antwort"
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Worker-Lanes · 1 Producer + 1 Consumer",
+      "wraps": [
+        "producer",
+        "render"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "Session-Text verlaesst den Host",
+      "wraps": [
+        "llm",
+        "notebooklm"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "session-to-enqueue",
+      "from": "sessions",
+      "to": "enqueue",
+      "label": "SessionEnd",
+      "variant": "emphasis"
+    },
+    {
+      "id": "enqueue-to-state",
+      "from": "enqueue",
+      "to": "state",
+      "label": "queue.txt",
+      "variant": "emphasis",
+      "labelDy": 90
+    },
+    {
+      "id": "state-to-producer",
+      "from": "state",
+      "to": "producer",
+      "label": "pick_oldest",
+      "variant": "emphasis"
+    },
+    {
+      "id": "producer-to-render",
+      "from": "producer",
+      "to": "render",
+      "label": "bestes Skript",
+      "variant": "emphasis"
+    },
+    {
+      "id": "render-to-out",
+      "from": "render",
+      "to": "out",
+      "label": "Download",
+      "variant": "emphasis"
+    },
+    {
+      "id": "out-to-social",
+      "from": "out",
+      "to": "social",
+      "label": "neue *.mp4",
+      "variant": "emphasis",
+      "labelDy": 90
+    },
+    {
+      "id": "producer-to-llm",
+      "from": "producer",
+      "to": "llm",
+      "label": "3 Varianten",
+      "labelDy": -60
+    },
+    {
+      "id": "render-to-nlm",
+      "from": "render",
+      "to": "notebooklm",
+      "label": "nlm CLI",
+      "labelDy": -60
+    },
+    {
+      "id": "sessions-to-feed",
+      "from": "sessions",
+      "to": "feed",
+      "label": "REST /api/v1",
+      "variant": "security"
+    },
+    {
+      "id": "social-to-samuel",
+      "from": "social",
+      "to": "samuel",
+      "label": "Freigabe",
+      "variant": "emphasis"
+    },
+    {
+      "id": "state-to-dashboard",
+      "from": "state",
+      "to": "dashboard",
+      "label": "liest Status",
+      "labelDy": 22
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Eingang",
+      "items": [
+        "Jede beendete Session haengt eine Zeile an queue.txt und weckt den Worker; Subagenten-Transkripte werden vorher verworfen.",
+        "Der Worker holt zusaetzlich Hermes-Sessions (state.db) und Codex-Rollouts der letzten 7 Tage nach, falls ein Hook nicht gefeuert hat."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Engpass Render-Lane",
+      "items": [
+        "Nur ein Consumer-Task gleichzeitig: pro Tick geht genau ein NotebookLM-Schritt eines einzigen Jobs voran.",
+        "Das Quota-Gate sperrt bis zu 5 h; ein Job bleibt 6 h im Inflight-Register und faellt danach ohne Fehlerzeile zurueck in die Queue.",
+        "build_fallback_video (edge-tts + ffmpeg) existiert, wird auf dem HEAD-Pfad aber nirgends aufgerufen — es gibt keinen Ersatzweg."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Grenzen und Bruchstelle",
+      "items": [
+        "Session-Text geht an MiniMax und Google; anonymisiert wird nur per Prompt-Anweisung und sanitize_source, nicht erzwungen.",
+        "Der Feed hat keinen Code-Pfad zu out/*.mp4 — fertige Videos erreichen ihn nur, wenn Samuel sie nach der Telegram-Freigabe selbst postet."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HAI-TIKTOK",
+    "quality_profile": "showcase",
+    "viewBox": [870, 540],
+    "legend": { "mode": "hidden" },
+    "repository": {
+      "url": "https://github.com/smlfg/HAI-TIKTOK.git",
+      "provider": "github",
+      "revision": "23d1346fe3bb0040add32250b5939f56e46932e0"
+    },
+    "views": [
+      {
+        "id": "feed-path",
+        "label": "Hauptpfad: Feed laden",
+        "focus": ["browser", "middleware", "app-server", "db", "feed-ui"],
+        "note": "Chronologischer Feed wird aus SQLite geladen und als TikTok-Style-Karten gerendert."
+      },
+      {
+        "id": "agent-ingest",
+        "label": "Agent API: Content erzeugen",
+        "focus": ["agent-client", "app-server", "db", "media-fs"],
+        "note": "HAI-Agenten posten via Bearer-Token Text/Bild/Video in den Feed."
+      },
+      {
+        "id": "ops",
+        "label": "Deployment & Pipeline",
+        "focus": ["docker", "scripts", "app-server"],
+        "note": "Docker-Container mit automatischen Migrationen; Python-Pipeline für TikTok-Review."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "browser",
+      "type": "external",
+      "label": "Browser / Handy",
+      "sublabel": "Feed-Reader + Admin",
+      "pos": [40, 200],
+      "size": [130, 60],
+      "sources": [
+        { "path": "src/app/page.tsx", "line": 24, "label": "Feed-Seite (Server Component)" },
+        { "path": "src/components/Feed.tsx", "line": 53, "label": "Client-seitiger Feed" }
+      ]
+    },
+    {
+      "id": "middleware",
+      "type": "security",
+      "label": "Middleware",
+      "sublabel": "Session-Guard",
+      "pos": [240, 100],
+      "size": [130, 56],
+      "sources": [
+        { "path": "src/middleware.ts", "line": 14, "label": "Schützt /upload, /ingest, /admin" }
+      ]
+    },
+    {
+      "id": "app-server",
+      "type": "backend",
+      "label": "Next.js App",
+      "sublabel": "App Router :3000",
+      "pos": [440, 200],
+      "size": [140, 60],
+      "sources": [
+        { "path": "next.config.ts", "line": 3, "label": "Standalone output" },
+        { "path": "src/app/layout.tsx", "line": 35, "label": "Root Layout" }
+      ]
+    },
+    {
+      "id": "db",
+      "type": "database",
+      "label": "SQLite",
+      "sublabel": "Prisma + better-sqlite3",
+      "pos": [660, 120],
+      "size": [140, 56],
+      "sources": [
+        { "path": "prisma/schema.prisma", "line": 15, "label": "Post-Model" },
+        { "path": "src/lib/db.ts", "line": 30, "label": "Prisma Client Singleton" }
+      ]
+    },
+    {
+      "id": "media-fs",
+      "type": "database",
+      "label": "Media Storage",
+      "sublabel": "data/media/",
+      "pos": [660, 280],
+      "size": [140, 56],
+      "sources": [
+        { "path": "src/lib/media.ts", "line": 13, "label": "Media-Verzeichnis" },
+        { "path": "src/lib/media.ts", "line": 84, "label": "Traversal-Schutz" }
+      ]
+    },
+    {
+      "id": "agent-client",
+      "type": "external",
+      "label": "HAI Agenten",
+      "sublabel": "Scripts + Hermes",
+      "pos": [40, 420],
+      "size": [130, 60],
+      "sources": [
+        { "path": "scripts/hai-post.sh", "line": 1, "label": "POST-Helper" },
+        { "path": "src/app/api/v1/posts/route.ts", "line": 80, "label": "POST /api/v1/posts" }
+      ]
+    },
+    {
+      "id": "feed-ui",
+      "type": "frontend",
+      "label": "Feed UI",
+      "sublabel": "TikTok-Style Scroll",
+      "pos": [240, 420],
+      "size": [130, 56],
+      "sources": [
+        { "path": "src/components/Feed.tsx", "line": 192, "label": "Vertikales Scroll-Container" },
+        { "path": "src/components/FeedItem.tsx", "line": 1, "label": "Einzelne Feed-Karte" }
+      ]
+    },
+    {
+      "id": "docker",
+      "type": "cloud",
+      "label": "Docker",
+      "sublabel": "Compose + Volumes",
+      "pos": [440, 460],
+      "size": [130, 56],
+      "sources": [
+        { "path": "docker-compose.yml", "line": 1, "label": "Service-Definition" },
+        { "path": "docker-entrypoint.sh", "line": 10, "label": "Auto-Migration" }
+      ]
+    },
+    {
+      "id": "scripts",
+      "type": "backend",
+      "label": "Pipeline Scripts",
+      "sublabel": "Python + Bash",
+      "pos": [660, 420],
+      "size": [140, 56],
+      "sources": [
+        { "path": "scripts/hai_tiktok_pipeline.py", "line": 1, "label": "TikTok Pipeline" },
+        { "path": "scripts/hai_tiktok_worker.py", "line": 1, "label": "Worker-Loop" }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Admin Zone (Session-Cookie)",
+      "wraps": ["app-server", "db", "media-fs"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "browser-to-middleware",
+      "from": "browser",
+      "to": "middleware",
+      "label": "HTTP :3000",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "middleware-to-app",
+      "from": "middleware",
+      "to": "app-server",
+      "label": "geprüft",
+      "fromSide": "right",
+      "toSide": "top"
+    },
+    {
+      "id": "app-to-db",
+      "from": "app-server",
+      "to": "db",
+      "label": "SQL (Prisma)",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "app-to-media",
+      "from": "app-server",
+      "to": "media-fs",
+      "label": "read/write",
+      "fromSide": "right",
+      "toSide": "left",
+      "variant": "dashed"
+    },
+    {
+      "id": "agent-to-app",
+      "from": "agent-client",
+      "to": "app-server",
+      "label": "Bearer Token",
+      "fromSide": "right",
+      "toSide": "bottom",
+      "variant": "emphasis"
+    },
+    {
+      "id": "app-to-feed",
+      "from": "app-server",
+      "to": "feed-ui",
+      "label": "SSR → Client",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDx": -30
+    },
+    {
+      "id": "docker-to-app",
+      "from": "docker",
+      "to": "app-server",
+      "label": "node server.js",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "labelDx": 40
+    }
+  ],
+  "cards": []
+}

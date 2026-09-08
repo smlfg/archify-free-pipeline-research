@@ -1,0 +1,420 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HAI-TIKTOK",
+    "output": "hai-tiktok.architecture.ling-3.0-flash-fin.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/smlfg/HAI-TIKTOK.git",
+      "provider": "github",
+      "revision": "23d1346fe3bb0040add32250b5939f56e46932e0"
+    },
+    "views": [
+      {
+        "id": "main-request-path",
+        "label": "Main request path",
+        "focus": [
+          "user",
+          "docker",
+          "nextjs",
+          "middleware",
+          "api",
+          "auth",
+          "db"
+        ],
+        "note": "User request flows from Docker through Next.js middleware to the API layer and SQLite."
+      },
+      {
+        "id": "content-pipeline",
+        "label": "NotebookLM content pipeline",
+        "focus": [
+          "pipeline",
+          "notebooklm"
+        ],
+        "note": "Background pipeline distills sessions into scripts and renders NotebookLM videos."
+      }
+    ],
+    "viewBox": [
+      880,
+      780
+    ]
+  },
+  "components": [
+    {
+      "id": "user",
+      "type": "external",
+      "label": "User",
+      "sublabel": "Browser / Mobile",
+      "pos": [
+        300,
+        10
+      ],
+      "size": [
+        140,
+        60
+      ],
+      "sources": [
+        {
+          "path": "src/app/page.tsx",
+          "line": 1,
+          "label": "Home page entry"
+        }
+      ]
+    },
+    {
+      "id": "docker",
+      "type": "cloud",
+      "label": "Docker Runtime",
+      "sublabel": "multi-stage build",
+      "pos": [
+        300,
+        130
+      ],
+      "size": [
+        140,
+        60
+      ],
+      "sources": [
+        {
+          "path": "Dockerfile",
+          "line": 1,
+          "label": "Multi-stage build"
+        },
+        {
+          "path": "docker-entrypoint.sh",
+          "line": 1,
+          "label": "Entrypoint"
+        }
+      ]
+    },
+    {
+      "id": "nextjs",
+      "type": "backend",
+      "label": "Next.js App",
+      "sublabel": "16.2 / React 19",
+      "pos": [
+        300,
+        250
+      ],
+      "size": [
+        140,
+        60
+      ],
+      "sources": [
+        {
+          "path": "package.json",
+          "line": 1,
+          "label": "next@16.2.11"
+        },
+        {
+          "path": "src/app/layout.tsx",
+          "line": 1,
+          "label": "Root layout"
+        }
+      ]
+    },
+    {
+      "id": "middleware",
+      "type": "security",
+      "label": "Auth Middleware",
+      "sublabel": "route protection",
+      "pos": [
+        300,
+        370
+      ],
+      "size": [
+        140,
+        60
+      ],
+      "sources": [
+        {
+          "path": "src/middleware.ts",
+          "line": 1,
+          "label": "Protected prefixes"
+        }
+      ]
+    },
+    {
+      "id": "pages",
+      "type": "frontend",
+      "label": "Page Components",
+      "sublabel": "Feed, Upload, Ingest, Admin",
+      "pos": [
+        100,
+        450
+      ],
+      "size": [
+        140,
+        60
+      ],
+      "sources": [
+        {
+          "path": "src/app/page.tsx",
+          "line": 1,
+          "label": "Home/Feed"
+        },
+        {
+          "path": "src/app/upload/page.tsx",
+          "line": 1,
+          "label": "Upload page"
+        },
+        {
+          "path": "src/app/ingest/page.tsx",
+          "line": 1,
+          "label": "Ingest page"
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "type": "backend",
+      "label": "API Routes",
+      "sublabel": "REST endpoints",
+      "pos": [
+        500,
+        450
+      ],
+      "size": [
+        140,
+        60
+      ],
+      "sources": [
+        {
+          "path": "src/app/api/v1/posts/route.ts",
+          "line": 1,
+          "label": "POST/GET /api/v1/posts"
+        },
+        {
+          "path": "src/app/api/v1/ingest/notebooklm/route.ts",
+          "line": 1,
+          "label": "POST ingest"
+        },
+        {
+          "path": "src/app/api/media/[...path]/route.ts",
+          "line": 1,
+          "label": "GET /api/media"
+        }
+      ]
+    },
+    {
+      "id": "auth",
+      "type": "security",
+      "label": "Auth Library",
+      "sublabel": "cookie + bearer token",
+      "pos": [
+        500,
+        570
+      ],
+      "size": [
+        140,
+        60
+      ],
+      "sources": [
+        {
+          "path": "src/lib/auth.ts",
+          "line": 1,
+          "label": "Signed session + API key"
+        }
+      ]
+    },
+    {
+      "id": "db",
+      "type": "database",
+      "label": "SQLite / Prisma",
+      "sublabel": "Post model",
+      "pos": [
+        100,
+        570
+      ],
+      "size": [
+        140,
+        60
+      ],
+      "sources": [
+        {
+          "path": "prisma/schema.prisma",
+          "line": 1,
+          "label": "Post model"
+        },
+        {
+          "path": "src/lib/db.ts",
+          "line": 1,
+          "label": "Prisma + better-sqlite3"
+        }
+      ]
+    },
+    {
+      "id": "media",
+      "type": "backend",
+      "label": "Media Service",
+      "sublabel": "upload / serve",
+      "pos": [
+        100,
+        690
+      ],
+      "size": [
+        140,
+        60
+      ],
+      "sources": [
+        {
+          "path": "src/lib/media.ts",
+          "line": 1,
+          "label": "saveUpload + resolveMediaPath"
+        }
+      ]
+    },
+    {
+      "id": "pipeline",
+      "type": "backend",
+      "label": "NotebookLM Pipeline",
+      "sublabel": "Python worker",
+      "pos": [
+        700,
+        370
+      ],
+      "size": [
+        140,
+        60
+      ],
+      "sources": [
+        {
+          "path": "scripts/hai_tiktok_worker.py",
+          "line": 1,
+          "label": "Worker + distiller"
+        },
+        {
+          "path": "scripts/hai_tiktok_pipeline.py",
+          "line": 1,
+          "label": "Coordinator"
+        }
+      ]
+    },
+    {
+      "id": "notebooklm",
+      "type": "external",
+      "label": "NotebookLM",
+      "sublabel": "Google video rendering",
+      "pos": [
+        700,
+        520
+      ],
+      "size": [
+        140,
+        60
+      ],
+      "sources": [
+        {
+          "path": "scripts/hai_tiktok_worker.py",
+          "line": 741,
+          "label": "create_video / download"
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "user-to-docker",
+      "from": "user",
+      "to": "docker"
+    },
+    {
+      "id": "docker-to-nextjs",
+      "from": "docker",
+      "to": "nextjs"
+    },
+    {
+      "id": "nextjs-to-middleware",
+      "from": "nextjs",
+      "to": "middleware"
+    },
+    {
+      "id": "middleware-to-pages",
+      "from": "middleware",
+      "to": "pages"
+    },
+    {
+      "id": "middleware-to-api",
+      "from": "middleware",
+      "to": "api"
+    },
+    {
+      "id": "middleware-to-pipeline",
+      "from": "middleware",
+      "to": "pipeline",
+      "variant": "dashed"
+    },
+    {
+      "id": "api-to-auth",
+      "from": "api",
+      "to": "auth",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "api-to-db",
+      "from": "api",
+      "to": "db"
+    },
+    {
+      "id": "auth-to-db",
+      "from": "auth",
+      "to": "db"
+    },
+    {
+      "id": "pipeline-to-notebooklm",
+      "from": "pipeline",
+      "to": "notebooklm"
+    },
+    {
+      "id": "docker-to-pipeline",
+      "from": "docker",
+      "to": "pipeline",
+      "variant": "dashed"
+    },
+    {
+      "id": "nextjs-to-pipeline",
+      "from": "nextjs",
+      "to": "pipeline",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Runtime",
+      "items": [
+        "Docker container with multi-stage build",
+        "Next.js 16 + React 19 standalone server",
+        "Prisma migrations on boot"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Application",
+      "items": [
+        "Auth middleware protects upload, ingest, admin",
+        "API routes with cookie + bearer token auth",
+        "SQLite via Prisma adapter for persistent state"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Pipeline",
+      "items": [
+        "Python worker distills sessions into scripts",
+        "NotebookLM renders explainer videos",
+        "Graceful fallback to edge-tts when quota exhausted"
+      ]
+    }
+  ],
+  "layout": {
+    "mode": "grid",
+    "cols": 4,
+    "gapX": 20,
+    "gapY": 80,
+    "cellW": 200,
+    "cellH": 60
+  }
+}

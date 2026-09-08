@@ -1,0 +1,349 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HAI-MCP Architecture",
+    "quality_profile": "showcase",
+    "viewBox": [1200, 700],
+    
+    "repository": {
+      "url": "https://github.com/smlfg/hai-mcp.git",
+      "provider": "github",
+      "link_mode": "local-only",
+      "revision": "d31d0a38d1f1089aceb9dba2ab50c0137dfe238f"
+    },
+    "views": [
+      {
+        "id": "main-path",
+        "label": "Main request path",
+        "focus": ["mcp-client", "fastmcp-server", "control-plane", "mission-engine"],
+        "note": "Follow a mission lifecycle request from client through control plane to contract kernel."
+      },
+      {
+        "id": "security-boundaries",
+        "label": "Security boundaries",
+        "focus": ["owner-gate", "path-validation", "locking", "http-transport"],
+        "note": "Isolate fail-closed gates, symlink-safe paths, and serialization."
+      },
+      {
+        "id": "persistence",
+        "label": "Durable state",
+        "focus": ["file-storage", "project-store", "audit-chain"],
+        "note": "Atomic JSON persistence, logical projects, and append-only audit."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "mcp-client",
+      "type": "external",
+      "label": "MCP Client",
+      "sublabel": "Agent / CLI",
+      "pos": [60, 350],
+      "size": [140, 68],
+      "sources": [
+        { "path": "src/hai_mcp/__main__.py", "line": 1, "label": "Entry via FastMCP" },
+        { "path": "src/hai_mcp/server.py", "line": 429, "label": "main() transport selection" }
+      ]
+    },
+    {
+      "id": "fastmcp-server",
+      "type": "backend",
+      "label": "FastMCP Server",
+      "sublabel": "MCP protocol handler",
+      "pos": [250, 350],
+      "size": [160, 68],
+      "sources": [
+        { "path": "src/hai_mcp/server.py", "line": 16, "label": "FastMCP instance" },
+        { "path": "src/hai_mcp/server.py", "line": 32, "label": "@mcp.tool() decorators" },
+        { "path": "src/hai_mcp/server.py", "line": 429, "label": "main() stdio/http" }
+      ]
+    },
+    {
+      "id": "control-plane",
+      "type": "backend",
+      "label": "ControlPlane",
+      "sublabel": "Central coordination",
+      "pos": [460, 350],
+      "size": [160, 68],
+      "sources": [
+        { "path": "src/hai_mcp/state.py", "line": 44, "label": "ControlPlane class" },
+        { "path": "src/hai_mcp/state.py", "line": 21, "label": "get_control_plane() singleton" },
+        { "path": "src/hai_mcp/state.py", "line": 52, "label": "ACTIVE_CONTEXT.json" }
+      ]
+    },
+    {
+      "id": "mission-engine",
+      "type": "backend",
+      "label": "MissionEngine",
+      "sublabel": "Contract kernel",
+      "pos": [460, 180],
+      "size": [160, 68],
+      "sources": [
+        { "path": "src/hai_mcp/mission.py", "line": 98, "label": "MissionEngine class" },
+        { "path": "src/hai_mcp/mission.py", "line": 402, "label": "open_mission() — one active mission" },
+        { "path": "src/hai_mcp/mission.py", "line": 174, "label": "append_audit() — hash chain" }
+      ]
+    },
+    {
+      "id": "owner-gate",
+      "type": "security",
+      "label": "OwnerGate",
+      "sublabel": "Separate principal approval",
+      "pos": [680, 180],
+      "size": [160, 68],
+      "sources": [
+        { "path": "src/hai_mcp/owner_gate.py", "line": 263, "label": "OwnerGate class" },
+        { "path": "src/hai_mcp/owner_gate.py", "line": 470, "label": "require() — challenge/response" },
+        { "path": "src/hai_mcp/owner_gate.py", "line": 95, "label": "fingerprint() binds exact change" }
+      ]
+    },
+    {
+      "id": "file-storage",
+      "type": "database",
+      "label": "File Storage",
+      "sublabel": "Atomic JSON persistence",
+      "pos": [680, 350],
+      "size": [160, 68],
+      "sources": [
+        { "path": "src/hai_mcp/storage.py", "line": 10, "label": "atomic_write_text()" },
+        { "path": "src/hai_mcp/storage.py", "line": 27, "label": "read_json() / write_json()" },
+        { "path": "src/hai_mcp/state.py", "line": 82, "label": "save_active() via write_json" }
+      ]
+    },
+    {
+      "id": "project-store",
+      "type": "database",
+      "label": "ProjectStore",
+      "sublabel": "Logical project registry",
+      "pos": [680, 520],
+      "size": [160, 68],
+      "sources": [
+        { "path": "src/hai_mcp/projects.py", "line": 30, "label": "ProjectStore class" },
+        { "path": "src/hai_mcp/projects.py", "line": 44, "label": "get_mount_path() per device" },
+        { "path": "src/hai_mcp/projects.py", "line": 63, "label": "bind_mount() owner-gated" }
+      ]
+    },
+    {
+      "id": "audit-chain",
+      "type": "database",
+      "label": "Audit Chain",
+      "sublabel": "Append-only event log",
+      "pos": [900, 180],
+      "size": [160, 68],
+      "sources": [
+        { "path": "src/hai_mcp/mission.py", "line": 174, "label": "append_audit() — seq + hash" },
+        { "path": "src/hai_mcp/mission.py", "line": 188, "label": "Event entry with prev_event_id" },
+        { "path": "src/hai_mcp/mission.py", "line": 122, "label": "audit_dir / HEAD.json" }
+      ]
+    },
+    {
+      "id": "path-validation",
+      "type": "security",
+      "label": "Path Validation",
+      "sublabel": "Symlink-safe confinement",
+      "pos": [900, 350],
+      "size": [160, 68],
+      "sources": [
+        { "path": "src/hai_mcp/paths.py", "line": 76, "label": "assert_under() realpath check" },
+        { "path": "src/hai_mcp/paths.py", "line": 47, "label": "confined_artifact_dir() no escape" },
+        { "path": "src/hai_mcp/paths.py", "line": 111, "label": "assert_relative_allowed() prefixes" }
+      ]
+    },
+    {
+      "id": "locking",
+      "type": "security",
+      "label": "Locking",
+      "sublabel": "fcntl serialization",
+      "pos": [900, 520],
+      "size": [160, 68],
+      "sources": [
+        { "path": "src/hai_mcp/locking.py", "line": 14, "label": "mission_state_lock() context" },
+        { "path": "src/hai_mcp/locking.py", "line": 22, "label": "fcntl.flock(LOCK_EX)" },
+        { "path": "src/hai_mcp/mission.py", "line": 411, "label": "with mission_state_lock() open" }
+      ]
+    },
+    {
+      "id": "http-transport",
+      "type": "cloud",
+      "label": "HTTP Transport",
+      "sublabel": "Streamable-HTTP + Bearer",
+      "pos": [250, 180],
+      "size": [160, 68],
+      "sources": [
+        { "path": "src/hai_mcp/http_transport.py", "line": 10, "label": "http_bind_allowed() fail-closed" },
+        { "path": "src/hai_mcp/http_transport.py", "line": 36, "label": "wrap_with_bearer_token()" },
+        { "path": "src/hai_mcp/server.py", "line": 450, "label": "streamable-http branch" }
+      ]
+    },
+    {
+      "id": "config",
+      "type": "backend",
+      "label": "Config",
+      "sublabel": "Environment-driven",
+      "pos": [60, 180],
+      "size": [140, 68],
+      "sources": [
+        { "path": "src/hai_mcp/config.py", "line": 27, "label": "Config dataclass (frozen)" },
+        { "path": "src/hai_mcp/config.py", "line": 43, "label": "from_env() reads HAI_* vars" },
+        { "path": "src/hai_mcp/config.py", "line": 110, "label": "ensure_hai_home() init dirs" }
+      ]
+    },
+    {
+      "id": "boundary",
+      "type": "security",
+      "label": "Boundary Validation",
+      "sublabel": "Fail-closed JSON types",
+      "pos": [60, 520],
+      "size": [140, 68],
+      "sources": [
+        { "path": "src/hai_mcp/boundary.py", "line": 13, "label": "strict_int() rejects bool" },
+        { "path": "src/hai_mcp/boundary.py", "line": 21, "label": "strict_optional_time_limit_hours" },
+        { "path": "src/hai_mcp/mission.py", "line": 339, "label": "strict_constraint_max_parallel" }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Owner Gate (separate principal)",
+      "wraps": ["owner-gate"],
+      "pad": 12
+    },
+    {
+      "kind": "security-group",
+      "label": "Confinement & Serialization",
+      "wraps": ["path-validation", "locking", "boundary"],
+      "pad": 12
+    },
+    {
+      "kind": "region",
+      "label": "HAI_HOME Durable State",
+      "wraps": ["file-storage", "project-store", "audit-chain"],
+      "pad": 12
+    }
+  ],
+  "connections": [
+    {
+      "id": "client-to-server",
+      "from": "mcp-client",
+      "to": "fastmcp-server",
+      "label": "MCP JSON-RPC",
+      "variant": "emphasis"
+    },
+    {
+      "id": "server-to-control",
+      "from": "fastmcp-server",
+      "to": "control-plane",
+      "label": "get_control_plane()",
+      "variant": "emphasis"
+    },
+    {
+      "id": "control-to-mission",
+      "from": "control-plane",
+      "to": "mission-engine",
+      "label": "MissionEngine delegation"
+    },
+    {
+      "id": "mission-to-owner",
+      "from": "mission-engine",
+      "to": "owner-gate",
+      "label": "OwnerGate.require()"
+    },
+    {
+      "id": "mission-to-audit",
+      "from": "mission-engine",
+      "to": "audit-chain",
+      "label": "append_audit() hash chain"
+    },
+    {
+      "id": "control-to-storage",
+      "from": "control-plane",
+      "to": "file-storage",
+      "label": "read_json / write_json"
+    },
+    {
+      "id": "mission-to-storage",
+      "from": "mission-engine",
+      "to": "file-storage",
+      "label": "contracts / sessions JSON"
+    },
+    {
+      "id": "mission-to-projects",
+      "from": "mission-engine",
+      "to": "project-store",
+      "label": "bind_mount / get_mount_path"
+    },
+    {
+      "id": "mission-to-paths",
+      "from": "mission-engine",
+      "to": "path-validation",
+      "label": "assert_under / allowed_paths"
+    },
+    {
+      "id": "mission-to-lock",
+      "from": "mission-engine",
+      "to": "locking",
+      "label": "mission_state_lock()"
+    },
+    {
+      "id": "server-to-http",
+      "from": "fastmcp-server",
+      "to": "http-transport",
+      "label": "streamable-http + Bearer"
+    },
+    {
+      "id": "server-to-config",
+      "from": "fastmcp-server",
+      "to": "config",
+      "label": "Config.from_env()"
+    },
+    {
+      "id": "control-to-config",
+      "from": "control-plane",
+      "to": "config",
+      "label": "Config for paths/gates"
+    },
+    {
+      "id": "mission-to-config",
+      "from": "mission-engine",
+      "to": "config",
+      "label": "owner_gate / channel / ttl"
+    },
+    {
+      "id": "boundary-to-mission",
+      "from": "boundary",
+      "to": "mission-engine",
+      "label": "strict_* validators"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Contract Kernel",
+      "items": [
+        "One active mission globally (fail-closed)",
+        "Versioned contracts with SHA-256 hash",
+        "Time-bounded session leases tied to contract version"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Owner as Separate Principal",
+      "items": [
+        "Nonce or fingerprint — agent cannot self-approve",
+        "Code/hash bound to exact change fingerprint",
+        "File or ntfy channel outside HAI_HOME"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Fail-Closed Boundaries",
+      "items": [
+        "fcntl lock serializes all mutations",
+        "Symlink-safe realpath confinement",
+        "Strict JSON boundary types (no bool→int)"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,190 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HAI TikTok Architecture",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/smlfg/HAI-TIKTOK.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "23d1346fe3bb0040add32250b5939f56e46932e0"
+    }
+  },
+  "components": [
+    {
+      "id": "web-frontend",
+      "type": "frontend",
+      "label": "Next.js Web App",
+      "sublabel": "Upload / Ingest / Login",
+      "pos": [60, 80],
+      "size": [220, 70],
+      "sources": [
+        { "path": "src/app/page.tsx", "line": 1, "label": "entry page" },
+        { "path": "src/app/upload/page.tsx", "line": 1, "label": "upload page" },
+        { "path": "src/app/ingest/page.tsx", "line": 1, "label": "ingest page" }
+      ]
+    },
+    {
+      "id": "nextjs-api",
+      "type": "backend",
+      "label": "Next.js API Routes",
+      "sublabel": "/api/v1/posts, /ingest, /auth",
+      "pos": [340, 80],
+      "size": [220, 70],
+      "sources": [
+        { "path": "src/app/api/v1/posts/route.ts", "line": 62, "label": "GET /api/v1/posts" },
+        { "path": "src/app/api/v1/posts/route.ts", "line": 80, "label": "POST /api/v1/posts" },
+        { "path": "src/app/api/v1/ingest/notebooklm/route.ts", "line": 31, "label": "POST /api/v1/ingest/notebooklm" }
+      ]
+    },
+    {
+      "id": "auth-system",
+      "type": "security",
+      "label": "Auth System",
+      "sublabel": "JWT cookie + Bearer token",
+      "pos": [620, 80],
+      "size": [220, 70],
+      "sources": [
+        { "path": "src/lib/auth.ts", "line": 70, "label": "verifyAdminPassword" },
+        { "path": "src/lib/auth.ts", "line": 76, "label": "createAdminSession" },
+        { "path": "src/lib/auth.ts", "line": 119, "label": "requireApiAuth" }
+      ]
+    },
+    {
+      "id": "sqlite-db",
+      "type": "database",
+      "label": "SQLite (Prisma)",
+      "sublabel": "Post model",
+      "pos": [60, 190],
+      "size": [220, 60],
+      "sources": [
+        { "path": "prisma/schema.prisma", "line": 15, "label": "Post model" },
+        { "path": "src/lib/db.ts", "line": 30, "label": "createPrismaClient" },
+        { "path": "src/lib/db.ts", "line": 39, "label": "prisma singleton" }
+      ]
+    },
+    {
+      "id": "media-storage",
+      "type": "database",
+      "label": "Media Storage",
+      "sublabel": "Local filesystem (MEDIA_DIR)",
+      "pos": [340, 190],
+      "size": [220, 60],
+      "sources": [
+        { "path": "src/lib/media.ts", "line": 13, "label": "getMediaDir" },
+        { "path": "src/lib/media.ts", "line": 63, "label": "saveUpload" },
+        { "path": "src/lib/media.ts", "line": 84, "label": "resolveMediaPath" }
+      ]
+    },
+    {
+      "id": "worker-pipeline",
+      "type": "backend",
+      "label": "Worker Pipeline",
+      "sublabel": "queue, distill, variants, quota, reap",
+      "pos": [620, 190],
+      "size": [220, 70],
+      "sources": [
+        { "path": "scripts/hai_tiktok_worker.py", "line": 254, "label": "pick_oldest" },
+        { "path": "scripts/hai_tiktok_worker.py", "line": 346, "label": "LOADERS map" },
+        { "path": "scripts/hai_tiktok_pipeline.py", "line": 73, "label": "Coordinator class" }
+      ]
+    },
+    {
+      "id": "queue-system",
+      "type": "messagebus",
+      "label": "File Queue",
+      "sublabel": "queue/done/failed/inflight",
+      "pos": [60, 310],
+      "size": [220, 60],
+      "sources": [
+        { "path": "scripts/hai_tiktok_worker.py", "line": 14, "label": "QUEUE path" },
+        { "path": "scripts/hai_tiktok_worker.py", "line": 15, "label": "DONE path" },
+        { "path": "scripts/hai_tiktok_worker.py", "line": 19, "label": "INFLIGHT path" }
+      ]
+    },
+    {
+      "id": "hermes-cli",
+      "type": "external",
+      "label": "Hermes CLI",
+      "sublabel": "MiniMax-M3 (distillation)",
+      "pos": [340, 310],
+      "size": [220, 60],
+      "sources": [
+        { "path": "scripts/hai_tiktok_worker.py", "line": 26, "label": "HERMES path" },
+        { "path": "scripts/hai_tiktok_worker.py", "line": 427, "label": "script_chat" },
+        { "path": "scripts/hai_tiktok_worker.py", "line": 441, "label": "distill call" }
+      ]
+    },
+    {
+      "id": "notebooklm-cli",
+      "type": "external",
+      "label": "NotebookLM CLI",
+      "sublabel": "Video generation",
+      "pos": [620, 310],
+      "size": [220, 60],
+      "sources": [
+        { "path": "scripts/hai_tiktok_worker.py", "line": 26, "label": "NLM path" },
+        { "path": "scripts/hai_tiktok_worker.py", "line": 735, "label": "add_source" },
+        { "path": "scripts/hai_tiktok_worker.py", "line": 740, "label": "create_video" }
+      ]
+    },
+    {
+      "id": "telegram-notify",
+      "type": "external",
+      "label": "Telegram",
+      "sublabel": "Notify via Hermes send",
+      "pos": [60, 420],
+      "size": [220, 60],
+      "sources": [
+        { "path": "scripts/hai_tiktok_worker.py", "line": 51, "label": "send_telegram" },
+        { "path": "scripts/hai_tiktok_worker.py", "line": 871, "label": "fetch_artifact telegram" }
+      ]
+    },
+    {
+      "id": "edge-tts-fallback",
+      "type": "external",
+      "label": "edge-tts Fallback",
+      "sublabel": "Local TTS + ffmpeg",
+      "pos": [340, 420],
+      "size": [220, 60],
+      "sources": [
+        { "path": "scripts/hai_tiktok_worker.py", "line": 745, "label": "EDGE_TTS path" },
+        { "path": "scripts/hai_tiktok_worker.py", "line": 764, "label": "build_fallback_video" }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Admin Area",
+      "wraps": ["web-frontend", "nextjs-api", "auth-system"],
+      "pad": 16
+    },
+    {
+      "kind": "region",
+      "label": "Worker Runtime",
+      "wraps": ["worker-pipeline", "queue-system", "hermes-cli", "notebooklm-cli", "edge-tts-fallback"],
+      "pad": 16
+    }
+  ],
+  "connections": [
+    { "id": "web-to-api", "from": "web-frontend", "to": "nextjs-api", "label": "HTTPS / JSON / multipart", "labelAt": [250, 60] },
+    { "id": "api-to-auth", "from": "nextjs-api", "to": "auth-system", "label": "verifyAdminPassword / requireApiAuth", "labelAt": [530, 60] },
+    { "id": "api-to-db", "from": "nextjs-api", "to": "sqlite-db", "label": "Prisma Client", "labelAt": [250, 165] },
+    { "id": "api-to-media", "from": "nextjs-api", "to": "media-storage", "label": "saveUpload / resolveMediaPath", "labelAt": [450, 165] },
+    { "id": "worker-to-queue", "from": "worker-pipeline", "to": "queue-system", "label": "pick_oldest / append", "labelAt": [200, 285], "via": [[900, 225], [900, 300], [280, 300]] },
+    { "id": "worker-to-hermes", "from": "worker-pipeline", "to": "hermes-cli", "label": "chat / distill / judge", "labelAt": [530, 285] },
+    { "id": "worker-to-nlm", "from": "worker-pipeline", "to": "notebooklm-cli", "label": "notebook create / source add / video create / download", "labelAt": [730, 285] },
+    { "id": "worker-to-tts", "from": "worker-pipeline", "to": "edge-tts-fallback", "label": "TTS + ffmpeg (quota fallback)", "labelAt": [530, 395] },
+    { "id": "worker-to-telegram", "from": "worker-pipeline", "to": "telegram-notify", "label": "Hermes send --to telegram", "labelAt": [200, 405], "via": [[950, 225], [950, 400], [280, 400]] },
+    { "id": "worker-to-db", "from": "worker-pipeline", "to": "sqlite-db", "label": "(via Hermes sessions DB)", "variant": "dashed", "labelAt": [200, 220], "via": [[950, 225], [950, 180], [280, 180]] },
+    { "id": "enqueue-hermes", "from": "hermes-cli", "to": "queue-system", "label": "enqueue_hermes_recent (scan state.db)", "variant": "dashed", "labelAt": [200, 365] }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Web Layer", "items": ["Next.js 15 (App Router)", "Upload / Ingest / Login pages", "Middleware protects /upload, /ingest, /admin"] },
+    { "dot": "emerald", "title": "API & Persistence", "items": ["REST: /api/v1/posts (CRUD)", "Ingest: /api/v1/ingest/notebooklm", "Auth: JWT cookie + Bearer HAI_API_KEY", "SQLite via Prisma (Post model)", "Local media filesystem"] },
+    { "dot": "violet", "title": "Worker Pipeline", "items": ["File queue (queue.txt / done.txt / failed.txt)", "Multi-source loaders: Hermes / Codex / Claude", "Parallel script variants (3 prompts → MiniMax-M3)", "Judge + random/human selection", "Quota gate + exponential backoff", "In-flight register (non-blocking reap)"] },
+    { "dot": "amber", "title": "External Services", "items": ["Hermes CLI → MiniMax-M3 (distillation)", "NotebookLM CLI (nlm) → video generation", "edge-tts + ffmpeg (local fallback)", "Telegram (notifications via Hermes)"] }
+  ]
+}

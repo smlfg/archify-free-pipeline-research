@@ -1,0 +1,273 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HAI-TIKTOK Runtime Architecture",
+    "quality_profile": "showcase",
+    "output": "hai-tiktok.architecture.nemotron-3.5-lightning.html"
+  },
+  "layout": {
+    "mode": "grid",
+    "cols": 8,
+    "gapX": 16,
+    "gapY": 20,
+    "cellW": 140,
+    "cellH": 80
+  },
+  "components": [
+    {
+      "id": "web-interface",
+      "type": "frontend",
+      "label": "Web Interface",
+      "sublabel": "Next.js App",
+      "sources": [
+        {
+          "path": "/home/smlflg/Projekte/HAI-TIKTOK/src/app/page.tsx",
+          "line": 1,
+          "label": "Home page entry point"
+        }
+      ]
+    },
+    {
+      "id": "api-routes",
+      "type": "backend",
+      "label": "API Routes",
+      "sublabel": "Next.js API",
+      "sources": [
+        {
+          "path": "/home/smlflg/Projekte/HAI-TIKTOK/src/app/api/v1/posts/route.ts",
+          "line": 1,
+          "label": "POST /api/v1/posts creation"
+        }
+      ]
+    },
+    {
+      "id": "auth-api",
+      "type": "security",
+      "label": "Auth API",
+      "sublabel": "Admin / Bearer",
+      "sources": [
+        {
+          "path": "/home/smlflg/Projekte/HAI-TIKTOK/src/lib/auth.ts",
+          "line": 1,
+          "label": "Admin password & session verification"
+        }
+      ]
+    },
+    {
+      "id": "worker-process",
+      "type": "backend",
+      "label": "Worker Process",
+      "sublabel": "hai_tiktok_worker.py",
+      "sources": [
+        {
+          "path": "/home/smlflg/Projekte/HAI-TIKTOK/scripts/hai_tiktok_worker.py",
+          "line": 1,
+          "label": "Main processing loop"
+        }
+      ]
+    },
+    {
+      "id": "pipeline-coordinator",
+      "type": "backend",
+      "label": "Pipeline Coordinator",
+      "sublabel": "hai_tiktok_pipeline.py",
+      "sources": [
+        {
+          "path": "/home/smlflg/Projekte/HAI-TIKTOK/scripts/hai_tiktok_pipeline.py",
+          "line": 1,
+          "label": "Job coordination & tick loop"
+        }
+      ]
+    },
+    {
+      "id": "prisma-db",
+      "type": "database",
+      "label": "Prisma / SQLite",
+      "sublabel": "data/db/hai.db",
+      "sources": [
+        {
+          "path": "/home/smlflg/Projekte/HAI-TIKTOK/src/lib/db.ts",
+          "line": 1,
+          "label": "Prisma client with SQLite adapter"
+        }
+      ]
+    },
+    {
+      "id": "notebooklm",
+      "type": "external",
+      "label": "NotebookLM",
+      "sublabel": "Google Video API",
+      "sources": [
+        {
+          "path": "/home/smlflg/Projekte/HAI-TIKTOK/scripts/hai_tiktok_worker.py",
+          "line": 215,
+          "label": "NotebookLM video creation & download"
+        }
+      ]
+    },
+    {
+      "id": "hermes-api",
+      "type": "external",
+      "label": "Hermes API",
+      "sublabel": "LLM Provider",
+      "sources": [
+        {
+          "path": "/home/smlflg/Projekte/HAI-TIKTOK/scripts/hai_tiktok_worker.py",
+          "line": 1,
+          "label": "Hermes chat calls for script distillation"
+        }
+      ]
+    },
+    {
+      "id": "codex-sessions",
+      "type": "external",
+      "label": "Codex Sessions",
+      "sublabel": "Session source data",
+      "sources": [
+        {
+          "path": "/home/smlflg/Projekte/HAI-TIKTOK/.codex/sessions/",
+          "line": 1,
+          "label": "Codex session rollout files"
+        }
+      ]
+    },
+    {
+      "id": "media-storage",
+      "type": "cloud",
+      "label": "Media Storage",
+      "sublabel": "Uploaded files",
+      "sources": [
+        {
+          "path": "/home/smlflg/Projekte/HAI-TIKTOK/src/lib/media.ts",
+          "line": 14,
+          "label": "getMediaDir() function"
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "HAI-TIKTOK System",
+      "wraps": [
+        "web-interface",
+        "api-routes",
+        "auth-api",
+        "worker-process",
+        "pipeline-coordinator",
+        "prisma-db",
+        "notebooklm",
+        "hermes-api",
+        "codex-sessions",
+        "media-storage"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "c1",
+      "from": "web-interface",
+      "to": "api-routes",
+      "label": "HTTP requests",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c2",
+      "from": "api-routes",
+      "to": "auth-api",
+      "label": "auth check",
+      "variant": "security"
+    },
+    {
+      "id": "c3",
+      "from": "api-routes",
+      "to": "prisma-db",
+      "label": "CRUD operations",
+      "route": "auto"
+    },
+    {
+      "id": "c4",
+      "from": "api-routes",
+      "to": "worker-process",
+      "label": "enqueue session",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 40
+    },
+    {
+      "id": "c5",
+      "from": "worker-process",
+      "to": "pipeline-coordinator",
+      "label": "tick / sync",
+      "route": "auto"
+    },
+    {
+      "id": "c6",
+      "from": "pipeline-coordinator",
+      "to": "prisma-db",
+      "label": "job status",
+      "route": "auto"
+    },
+    {
+      "id": "c7",
+      "from": "pipeline-coordinator",
+      "to": "hermes-api",
+      "label": "script distillation",
+      "route": "auto"
+    },
+    {
+      "id": "c8",
+      "from": "hermes-api",
+      "to": "prisma-db",
+      "label": "saved script",
+      "route": "auto"
+    },
+    {
+      "id": "c9",
+      "from": "pipeline-coordinator",
+      "to": "notebooklm",
+      "label": "video creation",
+      "variant": "emphasis"
+    },
+    {
+      "id": "c10",
+      "from": "notebooklm",
+      "to": "media-storage",
+      "label": "downloaded video",
+      "route": "auto"
+    },
+    {
+      "id": "c11",
+      "from": "codex-sessions",
+      "to": "worker-process",
+      "label": "session enqueue",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Entry Point",
+      "items": [
+        "Next.js web interface receives requests"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Processing Pipeline",
+      "items": [
+        "Script distillation - NotebookLM video - Media storage"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Trust Boundaries",
+      "items": [
+        "Auth API enforces admin/Bearer auth",
+        "Path traversal guard on media resolve"
+      ]
+    }
+  ]
+}

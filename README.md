@@ -8,7 +8,7 @@ Exploratory research on whether redundant full-repository scouting or specialize
 
 Does redundant full-repository scouting or specialized scouting produce better source-grounded architecture representations when composed by a stronger model?
 
-Status: Exploratory. A newer larger-repo run supports the variance/low-overlap hypothesis; no full orchestration strategy has been shown superior yet.
+Status: Exploratory. A newer larger-repo run is encouraging for fan-out scouting and supports the variance/low-overlap hypothesis; no full orchestration strategy has been shown superior yet.
 
 ## Why this exists
 
@@ -52,9 +52,11 @@ A later larger run produced a stronger signal for the fan-out hypothesis:
 | muse-spark-1.2 | 11 |
 | nemotron-3.5-lightning | 0 |
 
-This supports the overlap/variance hypothesis: in the smaller HAI-MCP case, 55% of the substance came from one or two models; in the newer larger run, 77% did. Larger projects appear to reduce overlap between model views, so a consensus-only pruning rule would throw away much of the useful signal.
+This is encouraging for fan-out scouting: a filter that requires at least three agreeing models would discard about 77% of the verified clusters in this run. Incomplete candidates can still be useful when their source references survive into the merge, which is exactly the failure-tolerant behavior the harness is meant to test.
 
-This is not yet proof that specialized scouting is superior overall. It is evidence that low-consensus findings matter and must be preserved for the stronger aggregator.
+The stronger claim remains limited. The run supports, but does not confirm, the idea that larger projects produce lower overlap between model views. Two projects differ in structure and assignment content, and 77% of the found clusters is not automatically 77% of all important project information. Also, `nemotron-3.5-lightning` needs clarification: if its candidate was formally usable but contributed 0 clusters, the report must distinguish candidate usability from merge-usable source evidence.
+
+Current interpretation: low-consensus findings matter and must be preserved for the stronger aggregator. Whether that becomes a better owner-facing architecture representation depends on the composer producing a map that is actually more understandable, not only more comprehensive.
 
 ## Representative artifacts
 
@@ -128,10 +130,23 @@ The project tracks more than whether HTML was produced:
 - `data/architecture-runs.csv` — compact run table.
 - `data/architecture-runs.json` — machine-readable summary and run metrics.
 - `data/latest-specialized-scouting-result.md` / `.json` — newer 110-evidence / 53-concept variance signal reported by Samuel.
+- `data/published-generated-artifacts.json` — index of the published Archify website artifacts.
 - `data/hai-mcp.claims.md` — 37 verified HAI-MCP concepts.
 - `data/hai-tiktok.claims.md` — 54 verified HAI-TIKTOK concepts.
 - `data/codex-archify-experiment.claims.md` — 21 verified codex-archify-experiment concepts.
 - `Wissehscaflichterversuchsaufbau.md` — German research framing and caveats.
+
+## Published Archify website artifacts
+
+The generated Archify results are committed under `generated/` so they can be opened directly from GitHub:
+
+- Archify HTML maps: `generated/*.architecture*.html`
+- Archify JSON IR: `generated/*.architecture*.json`
+- automated visual-check reports: `generated/*.visual-check.json` and `generated/*.visual-check.html`
+- visual evidence screenshots: `generated/*.visual-check.*.png`
+- merged claim summaries: `generated/*.claims.md`
+
+Raw `.logs/` and nested run logs are intentionally not published; they are local execution traces, not owner-facing evidence.
 
 ## Current conclusion
 

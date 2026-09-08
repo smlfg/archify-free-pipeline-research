@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HAI-MCP Runtime Architecture",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "agent",
+      "type": "external",
+      "label": "Agent / Client",
+      "sublabel": "AI Agent or Harness",
+      "pos": [50, 150],
+      "size": [120, 60]
+    },
+    {
+      "id": "http_transport",
+      "type": "security",
+      "label": "HTTP Transport",
+      "sublabel": "Bearer Token / Loopback",
+      "pos": [200, 150],
+      "size": [140, 60],
+      "tag": "Fail-closed"
+    },
+    {
+      "id": "mcp_server",
+      "type": "backend",
+      "label": "MCP Server",
+      "sublabel": "FastMCP Registry",
+      "pos": [380, 150],
+      "size": [130, 60],
+      "tag": "Tool handlers"
+    },
+    {
+      "id": "control_plane",
+      "type": "backend",
+      "label": "ControlPlane",
+      "sublabel": "Coordinator",
+      "pos": [560, 150],
+      "size": [130, 60],
+      "tag": "State engine"
+    },
+    {
+      "id": "mission_engine",
+      "type": "backend",
+      "label": "MissionEngine",
+      "sublabel": "Contracts",
+      "pos": [560, 50],
+      "size": [130, 60],
+      "tag": "Versioned"
+    },
+    {
+      "id": "project_store",
+      "type": "backend",
+      "label": "ProjectStore",
+      "sublabel": "Artifacts",
+      "pos": [560, 250],
+      "size": [130, 60],
+      "tag": "Mount table"
+    },
+    {
+      "id": "owner_gate",
+      "type": "security",
+      "label": "OwnerGate",
+      "sublabel": "Auth Gate",
+      "pos": [740, 150],
+      "size": [130, 60],
+      "tag": "Challenge-Response"
+    },
+    {
+      "id": "storage",
+      "type": "database",
+      "label": "Storage",
+      "sublabel": "Atomic I/O",
+      "pos": [740, 300],
+      "size": [130, 60],
+      "tag": "fsync+rename"
+    },
+    {
+      "id": "hai_home",
+      "type": "database",
+      "label": "HAI_HOME",
+      "sublabel": "Persistent State",
+      "pos": [920, 300],
+      "size": [130, 60],
+      "tag": "JSON store"
+    },
+    {
+      "id": "config",
+      "type": "backend",
+      "label": "Config",
+      "sublabel": "Environment",
+      "pos": [200, 50],
+      "size": [130, 60],
+      "tag": "Env-driven"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Transport Security",
+      "wraps": ["agent", "http_transport"]
+    },
+    {
+      "kind": "region",
+      "label": "HAI-MCP Core",
+      "wraps": ["mcp_server", "control_plane", "mission_engine", "project_store", "owner_gate", "storage", "hai_home", "config"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "agent_to_http",
+      "from": "agent",
+      "to": "http_transport",
+      "label": "MCP Request",
+      "variant": "emphasis",
+      "labelDy": 54
+    },
+    {
+      "id": "http_to_server",
+      "from": "http_transport",
+      "to": "mcp_server",
+      "label": "Verified Bearer",
+      "variant": "security",
+      "labelDy": 54
+    },
+    {
+      "id": "server_to_cp",
+      "from": "mcp_server",
+      "to": "control_plane",
+      "label": "Tool invocation",
+      "variant": "emphasis",
+      "labelDy": 54
+    },
+    {
+      "id": "cp_to_mission",
+      "from": "control_plane",
+      "to": "mission_engine",
+      "label": "Mission state",
+      "labelAt": [440, 80]
+    },
+    {
+      "id": "cp_to_project",
+      "from": "control_plane",
+      "to": "project_store",
+      "label": "Project ops",
+      "labelAt": [440, 220]
+    },
+    {
+      "id": "cp_to_gate",
+      "from": "control_plane",
+      "to": "owner_gate",
+      "label": "Auth check",
+      "labelDy": -24
+    },
+    {
+      "id": "gate_to_storage",
+      "from": "owner_gate",
+      "to": "storage",
+      "label": "Write state",
+      "labelDy": 54
+    },
+    {
+      "id": "storage_to_home",
+      "from": "storage",
+      "to": "hai_home",
+      "label": "Persist"
+    },
+    {
+      "id": "config_to_server",
+      "from": "config",
+      "to": "mcp_server",
+      "label": "Init",
+      "variant": "dashed",
+      "labelDy": -24
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Request Entry",
+      "items": [
+        "Agent sends MCP request over HTTP",
+        "Transport layer verifies bearer token or loopback",
+        "MCP server routes to registered tool handler"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "State Coordination",
+      "items": [
+        "ControlPlane orchestrates mission engine, project store, owner gate",
+        "MissionEngine manages versioned contracts and lifecycle",
+        "OwnerGate enforces challenge-response for sensitive actions"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Durability & Security",
+      "items": [
+        "Storage layer writes atomically with fsync + rename",
+        "HAI_HOME holds ACTIVE_CONTEXT.json, missions, project bindings",
+        "Config from environment with conservative defaults (fail-closed)"
+      ]
+    }
+  ]
+}

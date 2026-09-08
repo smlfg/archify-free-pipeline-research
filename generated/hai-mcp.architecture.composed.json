@@ -1,0 +1,551 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "hai-mcp — Control Plane mit Owner-Gate",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/smlfg/hai-mcp",
+      "provider": "github",
+      "revision": "d31d0a38d1f1089aceb9dba2ab50c0137dfe238f"
+    },
+    "viewBox": [
+      1340,
+      740
+    ],
+    "views": [
+      {
+        "id": "anfragepfad",
+        "label": "Anfragepfad",
+        "focus": [
+          "clients",
+          "transport",
+          "tools",
+          "boundary",
+          "plane"
+        ],
+        "note": "Vom Client durch Transport-Gate und Input-Boundary in die ControlPlane."
+      },
+      {
+        "id": "owner-gate",
+        "label": "Zweiter Principal",
+        "focus": [
+          "mission",
+          "gate",
+          "owner",
+          "audit"
+        ],
+        "note": "Irreversible Schritte brauchen eine Freigabe ausserhalb der Agenten-Reichweite."
+      },
+      {
+        "id": "evidenz",
+        "label": "Zustand und Evidenz",
+        "focus": [
+          "audit",
+          "lock",
+          "storage",
+          "paths",
+          "projects"
+        ],
+        "note": "Jede Zustandsaenderung laeuft gesperrt, atomar und pfad-begrenzt."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "clients",
+      "type": "external",
+      "label": "MCP-Clients",
+      "sublabel": "Claude Code, Codex",
+      "pos": [
+        30,
+        250
+      ],
+      "size": [
+        168,
+        66
+      ],
+      "sources": [
+        {
+          "path": "docs/client-snippets/claude-code.mcp.json",
+          "line": 1,
+          "label": "stdio-Konfiguration"
+        }
+      ]
+    },
+    {
+      "id": "transport",
+      "type": "security",
+      "label": "Transport-Gate",
+      "sublabel": "fail-closed bind policy",
+      "pos": [
+        298,
+        250
+      ],
+      "size": [
+        168,
+        66
+      ],
+      "sources": [
+        {
+          "path": "src/hai_mcp/http_transport.py",
+          "line": 10,
+          "label": "http_bind_allowed()"
+        },
+        {
+          "path": "src/hai_mcp/http_transport.py",
+          "line": 36,
+          "label": "wrap_with_bearer_token()"
+        },
+        {
+          "path": "src/hai_mcp/server.py",
+          "line": 450,
+          "label": "Bind-Pruefung beim Start"
+        }
+      ]
+    },
+    {
+      "id": "tools",
+      "type": "backend",
+      "label": "FastMCP Tool-Oberflaeche",
+      "sublabel": "@mcp.tool() Endpunkte",
+      "pos": [
+        566,
+        250
+      ],
+      "size": [
+        168,
+        66
+      ],
+      "sources": [
+        {
+          "path": "src/hai_mcp/server.py",
+          "line": 9,
+          "label": "FastMCP-Server"
+        },
+        {
+          "path": "src/hai_mcp/server.py",
+          "line": 305,
+          "label": "hai_intake()"
+        },
+        {
+          "path": "src/hai_mcp/server.py",
+          "line": 429,
+          "label": "main()"
+        }
+      ]
+    },
+    {
+      "id": "boundary",
+      "type": "security",
+      "label": "Input-Boundary",
+      "sublabel": "keine Koerzierung, kein Trim",
+      "pos": [
+        566,
+        80
+      ],
+      "size": [
+        168,
+        66
+      ],
+      "sources": [
+        {
+          "path": "src/hai_mcp/boundary.py",
+          "line": 13,
+          "label": "strict_int()"
+        },
+        {
+          "path": "src/hai_mcp/ids.py",
+          "line": 32,
+          "label": "validate_generated_id()"
+        }
+      ]
+    },
+    {
+      "id": "plane",
+      "type": "backend",
+      "label": "ControlPlane",
+      "sublabel": "Fassade ueber HAI_HOME",
+      "pos": [
+        834,
+        250
+      ],
+      "size": [
+        168,
+        66
+      ],
+      "sources": [
+        {
+          "path": "src/hai_mcp/state.py",
+          "line": 44,
+          "label": "ControlPlane"
+        },
+        {
+          "path": "src/hai_mcp/state.py",
+          "line": 76,
+          "label": "load_active()"
+        },
+        {
+          "path": "src/hai_mcp/state.py",
+          "line": 306,
+          "label": "accept_next_step()"
+        }
+      ]
+    },
+    {
+      "id": "mission",
+      "type": "backend",
+      "label": "MissionEngine",
+      "sublabel": "Missionen, Contracts, Leases",
+      "pos": [
+        1102,
+        250
+      ],
+      "size": [
+        168,
+        66
+      ],
+      "sources": [
+        {
+          "path": "src/hai_mcp/mission.py",
+          "line": 98,
+          "label": "MissionEngine"
+        },
+        {
+          "path": "src/hai_mcp/mission.py",
+          "line": 402,
+          "label": "open_mission()"
+        },
+        {
+          "path": "src/hai_mcp/mission.py",
+          "line": 615,
+          "label": "authorize_session()"
+        }
+      ]
+    },
+    {
+      "id": "gate",
+      "type": "security",
+      "label": "OwnerGate",
+      "sublabel": "Owner ist nicht der Agent",
+      "pos": [
+        1102,
+        420
+      ],
+      "size": [
+        168,
+        66
+      ],
+      "sources": [
+        {
+          "path": "src/hai_mcp/owner_gate.py",
+          "line": 190,
+          "label": "OwnerGate"
+        },
+        {
+          "path": "src/hai_mcp/owner_gate.py",
+          "line": 354,
+          "label": "require()"
+        },
+        {
+          "path": "src/hai_mcp/config.py",
+          "line": 12,
+          "label": "DEFAULT_OWNER_GATE"
+        }
+      ]
+    },
+    {
+      "id": "owner",
+      "type": "external",
+      "label": "Owner-Kanal",
+      "sublabel": "HAI_OWNER_HOME oder ntfy",
+      "pos": [
+        1102,
+        590
+      ],
+      "size": [
+        168,
+        66
+      ],
+      "sources": [
+        {
+          "path": "src/hai_mcp/owner_gate.py",
+          "line": 119,
+          "label": "FileOwnerChannel"
+        },
+        {
+          "path": "src/hai_mcp/owner_gate.py",
+          "line": 148,
+          "label": "NtfyOwnerChannel"
+        }
+      ]
+    },
+    {
+      "id": "paths",
+      "type": "security",
+      "label": "Pfad-Confinement",
+      "sublabel": "symlink-sicher",
+      "pos": [
+        1102,
+        80
+      ],
+      "size": [
+        168,
+        66
+      ],
+      "sources": [
+        {
+          "path": "src/hai_mcp/paths.py",
+          "line": 47,
+          "label": "confined_artifact_dir()"
+        },
+        {
+          "path": "src/hai_mcp/paths.py",
+          "line": 76,
+          "label": "assert_under()"
+        },
+        {
+          "path": "src/hai_mcp/mission.py",
+          "line": 246,
+          "label": "contract_path()"
+        }
+      ]
+    },
+    {
+      "id": "projects",
+      "type": "database",
+      "label": "Projekte und Artefakte",
+      "sublabel": "pro Geraet gemountet",
+      "pos": [
+        834,
+        80
+      ],
+      "size": [
+        168,
+        66
+      ],
+      "sources": [
+        {
+          "path": "src/hai_mcp/projects.py",
+          "line": 30,
+          "label": "ProjectStore"
+        },
+        {
+          "path": "src/hai_mcp/state.py",
+          "line": 26,
+          "label": "ARTIFACT_NAMES"
+        },
+        {
+          "path": "src/hai_mcp/state.py",
+          "line": 376,
+          "label": "NEXT_STEP-Historie"
+        }
+      ]
+    },
+    {
+      "id": "storage",
+      "type": "database",
+      "label": "Atomarer Store",
+      "sublabel": "HAI_HOME",
+      "pos": [
+        298,
+        420
+      ],
+      "size": [
+        168,
+        66
+      ],
+      "sources": [
+        {
+          "path": "src/hai_mcp/storage.py",
+          "line": 10,
+          "label": "atomic_write_text()"
+        },
+        {
+          "path": "src/hai_mcp/storage.py",
+          "line": 33,
+          "label": "write_json()"
+        },
+        {
+          "path": "src/hai_mcp/config.py",
+          "line": 83,
+          "label": "ensure_hai_home()"
+        }
+      ]
+    },
+    {
+      "id": "lock",
+      "type": "security",
+      "label": "mission_state_lock",
+      "sublabel": "serialisierte Mutationen",
+      "pos": [
+        566,
+        420
+      ],
+      "size": [
+        168,
+        66
+      ],
+      "sources": [
+        {
+          "path": "src/hai_mcp/locking.py",
+          "line": 13,
+          "label": "mission_state_lock()"
+        }
+      ]
+    },
+    {
+      "id": "audit",
+      "type": "database",
+      "label": "Audit-Kette",
+      "sublabel": "MissionEngine.append_audit",
+      "pos": [
+        834,
+        420
+      ],
+      "size": [
+        168,
+        66
+      ],
+      "sources": [
+        {
+          "path": "src/hai_mcp/mission.py",
+          "line": 121,
+          "label": "audit_head_path"
+        },
+        {
+          "path": "src/hai_mcp/mission.py",
+          "line": 174,
+          "label": "append_audit()"
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Owner-Domaene",
+      "wraps": [
+        "owner"
+      ],
+      "pad": 16
+    },
+    {
+      "kind": "region",
+      "label": "HAI_HOME",
+      "wraps": [
+        "storage",
+        "lock",
+        "audit"
+      ],
+      "pad": 20
+    }
+  ],
+  "connections": [
+    {
+      "from": "clients",
+      "to": "transport",
+      "label": "stdio / HTTP",
+      "variant": "emphasis"
+    },
+    {
+      "from": "transport",
+      "to": "tools",
+      "label": "Bearer-Token",
+      "variant": "security"
+    },
+    {
+      "from": "tools",
+      "to": "plane",
+      "label": "Tool-Aufruf",
+      "variant": "emphasis"
+    },
+    {
+      "from": "plane",
+      "to": "mission",
+      "label": "self.mission",
+      "variant": "emphasis"
+    },
+    {
+      "from": "tools",
+      "to": "boundary",
+      "label": "strict_*() zuerst",
+      "variant": "security"
+    },
+    {
+      "from": "plane",
+      "to": "projects",
+      "label": "Projekt-Mounts"
+    },
+    {
+      "from": "mission",
+      "to": "paths",
+      "label": "assert_under()",
+      "variant": "security"
+    },
+    {
+      "from": "paths",
+      "to": "projects",
+      "label": "confined dir"
+    },
+    {
+      "from": "mission",
+      "to": "gate",
+      "label": "require()",
+      "variant": "security",
+      "labelDy": 45
+    },
+    {
+      "from": "gate",
+      "to": "owner",
+      "label": "Einmal-Nonce",
+      "variant": "security",
+      "labelDy": 45
+    },
+    {
+      "from": "gate",
+      "to": "audit",
+      "label": "append_audit"
+    },
+    {
+      "from": "audit",
+      "to": "lock",
+      "label": "unter flock"
+    },
+    {
+      "from": "lock",
+      "to": "storage",
+      "label": "tmp + rename"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Hauptpfad",
+      "items": [
+        "MCP-Client erreicht die FastMCP-Tools nur durch das Transport-Gate",
+        "ControlPlane ist die Fassade und haelt self.mission = MissionEngine(cfg)",
+        "MissionEngine ruft OwnerGate.require() vor irreversiblen Schritten"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Fail-closed",
+      "items": [
+        "Nicht-Loopback-Bind nur mit nicht-leerem Bearer-Token",
+        "strict_int() lehnt bool und Zahl-als-String ab",
+        "validate_generated_id() ohne Koerzierung, ohne Whitespace-Trim",
+        "assert_under() weist Symlink-Ausbrueche aus HAI_HOME zurueck"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Evidenz",
+      "items": [
+        "Die Audit-Kette haengt an HEAD.json und gehoert MissionEngine.append_audit()",
+        "OwnerGate wird mit audit=self.append_audit gebaut, Gate-Entscheidungen landen in derselben Kette",
+        "Jeder Append laeuft unter mission_state_lock, jeder Write ueber tmp + rename"
+      ]
+    }
+  ]
+}

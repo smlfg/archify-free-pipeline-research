@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HAI-MCP Control Plane",
+    "subtitle": "Owner-gated mission control served over MCP",
+    "output": "hai-mcp.architecture.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/smlfg/hai-mcp",
+      "provider": "github",
+      "revision": "d31d0a38d1f1089aceb9dba2ab50c0137dfe238f"
+    },
+    "views": [
+      { "id": "main-path", "label": "Tool call to durable state", "focus": ["client", "server", "control_plane", "mission_engine", "path_guard", "storage"], "note": "A tool call flows from client through the FastMCP layer into the mission state machine and the confined HAI_HOME store." },
+      { "id": "owner-gate", "label": "Owner-gated actions", "focus": ["mission_engine", "owner_gate", "owner_channel", "owner", "client"], "note": "Gated actions issue a code through a channel the agent cannot read; the human relays it back via the client." },
+      { "id": "projects", "label": "Project resolution", "focus": ["control_plane", "project_store", "path_guard"], "note": "Project paths are resolved and confined before any artifact is touched." }
+    ]
+  },
+  "components": [
+    { "id": "client", "type": "external", "label": "MCP Client", "sublabel": "agent / harness", "pos": [40, 300], "size": [130, 60] },
+    { "id": "server", "type": "backend", "label": "FastMCP Tool Layer", "sublabel": "server.py", "pos": [240, 300], "size": [150, 64], "sources": [{ "path": "src/hai_mcp/server.py", "line": 16, "end_line": 35, "label": "mcp = FastMCP(...)" }, { "path": "src/hai_mcp/server.py", "line": 429, "end_line": 477, "label": "main(): stdio / streamable-http" }] },
+    { "id": "control_plane", "type": "backend", "label": "ControlPlane", "sublabel": "state.py", "pos": [460, 300], "size": [150, 64], "sources": [{ "path": "src/hai_mcp/state.py", "line": 45, "label": "class ControlPlane" }] },
+    { "id": "project_store", "type": "backend", "label": "ProjectStore", "sublabel": "projects.py", "pos": [460, 440], "size": [150, 60], "sources": [{ "path": "src/hai_mcp/projects.py", "line": 30, "label": "class ProjectStore" }] },
+    { "id": "mission_engine", "type": "backend", "label": "MissionEngine", "sublabel": "mission.py", "pos": [680, 300], "size": [150, 64], "sources": [{ "path": "src/hai_mcp/mission.py", "line": 99, "end_line": 107, "label": "class MissionEngine" }] },
+    { "id": "path_guard", "type": "security", "label": "Path Confinement", "sublabel": "paths.py", "pos": [680, 150], "size": [150, 60], "sources": [{ "path": "src/hai_mcp/paths.py", "line": 47, "end_line": 65, "label": "confined_artifact_dir()" }, { "path": "src/hai_mcp/paths.py", "line": 76, "label": "assert_under()" }] },
+    { "id": "storage", "type": "database", "label": "HAI_HOME Store", "sublabel": "atomic JSON + locking", "pos": [880, 150], "size": [150, 64], "sources": [{ "path": "src/hai_mcp/storage.py", "line": 10, "end_line": 24, "label": "atomic_write_text()" }, { "path": "src/hai_mcp/locking.py", "line": 14, "end_line": 32, "label": "mission_state_lock()" }] },
+    { "id": "owner_gate", "type": "security", "label": "OwnerGate", "sublabel": "owner_gate.py", "pos": [680, 440], "size": [150, 64], "tag": "separate principal", "sources": [{ "path": "src/hai_mcp/owner_gate.py", "line": 191, "label": "class OwnerGate" }, { "path": "src/hai_mcp/owner_gate.py", "line": 354, "label": "require()" }] },
+    { "id": "owner_channel", "type": "messagebus", "label": "Owner Channel", "sublabel": "file or ntfy", "pos": [880, 440], "size": [150, 64], "sources": [{ "path": "src/hai_mcp/owner_gate.py", "line": 119, "end_line": 146, "label": "FileOwnerChannel.deliver()" }, { "path": "src/hai_mcp/owner_gate.py", "line": 148, "end_line": 188, "label": "NtfyOwnerChannel.deliver()" }] },
+    { "id": "owner", "type": "external", "label": "Owner", "sublabel": "human", "pos": [1060, 440], "size": [120, 60] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "HAI_HOME (device-local state)", "wraps": ["control_plane", "project_store", "mission_engine", "path_guard", "storage", "owner_gate"] },
+    { "kind": "security-group", "label": "owner principal (outside agent read access)", "wraps": ["owner_channel", "owner"] }
+  ],
+  "connections": [
+    { "id": "call", "from": "client", "to": "server", "label": "tool call (stdio / HTTP)", "variant": "emphasis", "labelDy": 54 },
+    { "id": "delegate", "from": "server", "to": "control_plane", "label": "get_control_plane()", "labelDy": 56 },
+    { "id": "resolve-project", "from": "control_plane", "to": "project_store", "label": "resolve / list projects", "labelDy": 24 },
+    { "id": "mission-ops", "from": "control_plane", "to": "mission_engine", "label": "mission ops" },
+    { "id": "confine", "from": "mission_engine", "to": "path_guard", "label": "confine artifact path", "fromSide": "top", "toSide": "bottom" },
+    { "id": "persist", "from": "path_guard", "to": "storage", "label": "atomic read / write", "labelDy": 54 },
+    { "id": "gate", "from": "mission_engine", "to": "owner_gate", "label": "accept_next_step / recontract", "variant": "security", "fromSide": "bottom", "toSide": "left" },
+    { "id": "issue-code", "from": "owner_gate", "to": "owner_channel", "label": "issue one-time code", "variant": "security", "labelDy": 56 },
+    { "id": "deliver", "from": "owner_channel", "to": "owner", "label": "deliver code", "labelDy": 56 },
+    { "id": "relay", "from": "owner", "to": "client", "label": "relay code out-of-band", "variant": "dashed", "fromSide": "bottom", "toSide": "bottom", "via": [[1120, 600], [105, 600]] }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Entry point", "items": ["FastMCP exposes 20 tools over stdio or streamable-http (server.py)", "Each tool is a thin wrapper delegating to a single ControlPlane instance"] },
+    { "dot": "emerald", "title": "State machine", "items": ["MissionEngine holds one canonical, versioned mission contract at a time", "All mutations serialize through a reentrant fcntl lock and land via atomic write+rename"] },
+    { "dot": "rose", "title": "Owner as separate principal", "items": ["accept_next_step and recontract require a one-time code delivered outside the agent's read path", "OwnerGate stores only a salted hash of the code, never the plaintext"] }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "layout": {
+    "mode": "grid",
+    "cols": 8
+  },
+  "meta": {
+    "title": "codex-archify-experiment: Project Reader Architecture",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/smlflg/codex-archify-experiment",
+      "provider": "github",
+      "revision": "b99676615f512e756adc5c41b28dbc7d8edaebf9"
+    }
+  },
+  "components": [
+    {
+      "id": "cli-entry",
+      "type": "external",
+      "label": "CLI",
+      "row": 0,
+      "col": 0,
+      "size": [130, 60],
+      "sources": [
+        { "path": "codex-archify-experiment/project_reader/cli.py", "line": 12, "label": "main() function" }
+      ]
+    },
+    {
+      "id": "source-freezer",
+      "type": "backend",
+      "label": "Freezer",
+      "row": 0,
+      "col": 1,
+      "size": [130, 60],
+      "sources": [
+        { "path": "codex-archify-experiment/project_reader/evidence.py", "line": 33, "label": "snapshot()" }
+      ]
+    },
+    {
+      "id": "source-chunker",
+      "type": "database",
+      "label": "Chunker",
+      "row": 0,
+      "col": 2,
+      "size": [130, 60],
+      "sources": [
+        { "path": "codex-archify-experiment/project_reader/evidence.py", "line": 103, "label": "chunks()" }
+      ]
+    },
+    {
+      "id": "model-scout",
+      "type": "cloud",
+      "label": "Scout",
+      "row": 0,
+      "col": 3,
+      "size": [130, 60],
+      "sources": [
+        { "path": "codex-archify-experiment/project_reader/pipeline.py", "line": 17, "label": "SCOUT_CONTRACT" }
+      ]
+    },
+    {
+      "id": "claim-merger",
+      "type": "security",
+      "label": "Merger",
+      "row": 0,
+      "col": 4,
+      "size": [130, 60],
+      "sources": [
+        { "path": "codex-archify-experiment/project_reader/evidence.py", "line": 135, "label": "merge()" }
+      ]
+    },
+    {
+      "id": "composer",
+      "type": "messagebus",
+      "label": "Composer",
+      "row": 0,
+      "col": 5,
+      "size": [130, 60],
+      "sources": [
+        { "path": "codex-archify-experiment/project_reader/composer.py", "line": 1, "label": "contract()" }
+      ]
+    },
+    {
+      "id": "report-generator",
+      "type": "frontend",
+      "label": "Report",
+      "row": 0,
+      "col": 6,
+      "size": [130, 60],
+      "sources": [
+        { "path": "codex-archify-experiment/project_reader/report.py", "line": 1, "label": "report()" }
+      ]
+    },
+    {
+      "id": "project-reader",
+      "type": "external",
+      "label": "Reader",
+      "row": 0,
+      "col": 7,
+      "size": [130, 60],
+      "sources": [
+        { "path": "codex-archify-experiment/project_reader/__init__.py", "line": 3, "label": "VERSION" }
+      ]
+    }
+  ],
+  "connections": [
+    { "id": "c1", "from": "cli-entry", "to": "source-freezer" },
+    { "id": "c2", "from": "source-freezer", "to": "source-chunker" },
+    { "id": "c3", "from": "source-chunker", "to": "model-scout" },
+    { "id": "c4", "from": "model-scout", "to": "claim-merger" },
+    { "id": "c5", "from": "claim-merger", "to": "composer" },
+    { "id": "c6", "from": "composer", "to": "report-generator" },
+    { "id": "c7", "from": "report-generator", "to": "project-reader" }
+  ]
+}

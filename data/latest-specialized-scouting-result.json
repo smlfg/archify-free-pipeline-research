@@ -1,6 +1,6 @@
 {
   "source": "Samuel report in HAI session, 2026-09-09",
-  "status": "exploratory_support_for_overlap_variance_hypothesis",
+  "status": "encouraging_exploratory_support_for_fan_out_overlap_variance_hypothesis",
   "evidence_items": 110,
   "maps": 6,
   "verified_concepts": 53,
@@ -26,6 +26,12 @@
   "comparison_signal": {
     "hai_mcp_low_overlap_share": 0.55,
     "new_larger_run_low_overlap_share": 0.77,
-    "interpretation": "Larger projects appear to reduce overlap between model views; fan-out carries more useful low-consensus signal. This supports the variance/overlap hypothesis but does not prove overall strategy superiority."
-  }
+    "interpretation": "The larger run shows lower overlap than the smaller HAI-MCP run. This supports the variance/overlap hypothesis, but does not confirm a general larger-project rule or prove overall strategy superiority."
+  },
+  "caveats": [
+    "77% of found clusters is not automatically 77% of all important project information.",
+    "The statement that both Nemotron candidates were usable needs clarification because nemotron-3.5-lightning contributed 0 clusters.",
+    "In this merge, verified first means that the referenced code location exists; it does not by itself prove the architectural interpretation."
+  ],
+  "next_decisive_check": "Whether the composer translates the extra fan-out findings into an owner-facing architecture map that is actually more understandable, not only more comprehensive."
 }

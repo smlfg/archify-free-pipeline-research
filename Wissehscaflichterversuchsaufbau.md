@@ -21,7 +21,7 @@ Gleichzeitig enthielt die Arbeit exploratives Coding und einen Ansatz zum Varian
 
 Does redundant full-repository scouting or specialized scouting produce better source-grounded architecture representations when composed by a stronger model?
 
-Status: Exploratory. Ein neuer größerer Lauf unterstützt die Varianz-/Low-Overlap-Hypothese; eine vollständige Strategie ist weiterhin noch nicht als überlegen gezeigt.
+Status: Exploratory. Ein neuer größerer Lauf ist ermutigend für den Fächer und unterstützt die Varianz-/Low-Overlap-Hypothese; eine vollständige Strategie ist weiterhin noch nicht als überlegen gezeigt.
 
 Deutsch: Produziert redundantes Full-Repository-Scouting oder spezialisiertes Scouting bessere source-grounded Architektur-Repräsentationen, wenn ein stärkeres Modell sie komponiert?
 
@@ -48,7 +48,7 @@ Beobachtete Erkenntnisse:
 
 ## Neuer Befund
 
-Der neue größere Lauf ist ein stärkerer Befund für den Fächer-Ansatz:
+Der neue größere Lauf ist ein ermutigender Befund für den Fächer-Ansatz. „Hypothese bestätigt“ wäre aber stärker, als diese Zahlen tragen:
 
 ```text
 110 Belege aus 6 Karten -> 53 verifizierte Konzepte
@@ -68,9 +68,17 @@ Der neue größere Lauf ist ein stärkerer Befund für den Fächer-Ansatz:
 | muse-spark-1.2 | 11 |
 | nemotron-3.5-lightning | 0 |
 
-Interpretation: Bei HAI-MCP kamen 55% der Substanz von ein bis zwei Modellen; im neuen größeren Lauf sind es 77%. Je größer das Projekt, desto weniger überlappen die Modellblicke und desto mehr trägt der Fächer. Ein reines Konsensverfahren würde hier viele der nützlichen Funde verwerfen.
+Interpretation: 41 von 53 belegten Clustern kommen nur von ein oder zwei Modellen. Ein Filter „mindestens drei Modelle müssen zustimmen“ würde also rund 77% der gefundenen Cluster aussortieren. Unterschiedliche Perspektiven tragen viel zur gesammelten Abdeckung bei.
 
-Das bestätigt die Varianz-/Low-Overlap-Hypothese für diesen beobachteten Fall. Es beweist noch nicht, dass spezialisierte Scouts als Gesamtstrategie überlegen sind.
+Kandidaten ohne fertiges HTML bleiben nutzbar, wenn ihre Quellen in den Merge eingehen. Genau das ist ein Ziel des Harness: Ein Modell muss den Darstellungsschritt nicht abschließen, damit seine Analyse dem Aggregator hilft.
+
+Einschränkungen: „Größeres Projekt -> weniger Überlappung“ ist damit gestützt, noch nicht bestätigt. Zwischen zwei Projekten ändern sich auch Struktur und Aufgabeninhalt. Außerdem sind 77% der gefundenen Cluster nicht automatisch 77% der gesamten wichtigen Projektinformation.
+
+Unstimmigkeit: „Beide Nemotrons brauchbar“ passt nicht ohne Erklärung zu `nemotron-3.5-lightning` mit 0 Clustern. Möglich ist: formal brauchbarer Kandidat, aber keine für den Merge verwertbaren Quellen. Das muss getrennt werden.
+
+Begriffspräzision: In diesem Merge bedeutet „verifiziert“ zunächst, dass die referenzierte Codestelle existiert. Es beweist noch nicht automatisch, dass die behauptete architektonische Bedeutung vollständig stimmt.
+
+Für die Frage „War die Mühe wert?“ ist das ein konkreter Teilerfolg: Der Fächer sammelt zusätzliche Befunde und überlebt unvollständige Ausgaben. Ob daraus der gewünschte Nutzen entsteht, entscheidet sich daran, ob der Composer diese Befunde in eine Karte übersetzt, mit der Samuel tatsächlich mehr versteht.
 
 ## Kontrollierter Vergleich
 
@@ -126,7 +134,7 @@ Ohne diese Spuren kann man hinterher nicht unterscheiden, ob die Aufgabenverteil
 
 ## Ehrlicher Stand
 
-Wir haben aus fehlgeschlagenen Versuchen einen neuen Skill-/Pipeline-Ansatz abgeleitet und eingebunden. Der neue größere Lauf zeigt, dass Low-Consensus-Funde sehr viel Substanz tragen können. Dass eine vollständige Phasenaufteilung als Strategie besser ist, ist damit plausibler, aber noch nicht allgemein gezeigt.
+Wir haben aus fehlgeschlagenen Versuchen einen neuen Skill-/Pipeline-Ansatz abgeleitet und eingebunden. Der neue größere Lauf zeigt, dass Low-Consensus-Funde sehr viel Substanz tragen können. Dass eine vollständige Phasenaufteilung als Strategie besser ist, ist damit plausibler, aber noch nicht allgemein gezeigt. Der nächste Prüfpunkt ist die Composer-Qualität: mehr Befunde müssen in eine verständlichere Karte übersetzt werden, nicht nur in mehr Material.
 
 Der wissenschaftlich interessante Teil ist nicht die Menge des gebauten Codes, sondern die präzise Frage, die dokumentierten Fehlerbilder und der kontrollierte Vergleich zwischen Redundanz und Spezialisierung.
 

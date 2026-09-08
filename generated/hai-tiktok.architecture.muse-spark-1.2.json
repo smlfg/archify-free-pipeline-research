@@ -1,0 +1,360 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HAI-TIKTOK — Personal Feed + Agent Video Pipeline",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/smlfg/HAI-TIKTOK.git",
+      "provider": "github",
+      "revision": "23d1346fe3bb0040add32250b5939f56e46932e0"
+    },
+    "views": [
+      {
+        "id": "main-path",
+        "label": "Agent → Video → Feed",
+        "focus": ["agentSessions", "sessionWorker", "pipeline", "notebooklm", "haiApi", "sqlite", "webFeed"],
+        "note": "Ein Agenten-Session wird eingereiht, veredelt, bei NotebookLM gerendert und landet als Post im Feed."
+      },
+      {
+        "id": "publish-path",
+        "label": "Publish & Ingest",
+        "focus": ["haiApi", "sqlite", "mediaStore", "webFeed", "mobileApp", "authGate"],
+        "note": "Browser und Mobile lesen den Feed; Upload und NotebookLM-Ingest laufen über die gleiche API hinter Auth."
+      },
+      {
+        "id": "refine-loop",
+        "label": "Script-Veredelung",
+        "focus": ["pipeline", "scriptOptimizer", "notebooklm"],
+        "note": "Der Koordinator verfeinert Skripte mit Judge-Feedback und löst erst block-freie Revisionen aus."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "agentSessions",
+      "type": "external",
+      "label": "Agent Sessions",
+      "sublabel": "Hermes + Codex + Claude",
+      "pos": [40, 250],
+      "size": [142, 62],
+      "sources": [
+        {
+          "path": "scripts/hai_tiktok_worker.py",
+          "line": 351,
+          "label": "LOADERS: claude/hermes/codex"
+        }
+      ]
+    },
+    {
+      "id": "sessionWorker",
+      "type": "backend",
+      "label": "Session Worker",
+      "sublabel": "hai_tiktok_worker.py",
+      "pos": [240, 250],
+      "size": [142, 62],
+      "sources": [
+        {
+          "path": "scripts/hai_tiktok_worker.py",
+          "line": 984,
+          "label": "process_one + queue"
+        }
+      ]
+    },
+    {
+      "id": "pipeline",
+      "type": "backend",
+      "label": "Pipeline Coordinator",
+      "sublabel": "tick · reserve · poll",
+      "pos": [460, 250],
+      "size": [150, 62],
+      "sources": [
+        {
+          "path": "scripts/hai_tiktok_pipeline.py",
+          "line": 73,
+          "label": "class Coordinator"
+        }
+      ]
+    },
+    {
+      "id": "scriptOptimizer",
+      "type": "backend",
+      "label": "Script Optimizer",
+      "sublabel": "assess · compare · refine",
+      "pos": [460, 90],
+      "size": [150, 62],
+      "sources": [
+        {
+          "path": "scripts/hai_tiktok_script_optimizer.py",
+          "line": 148,
+          "label": "assess() Rubrik + Blocker"
+        }
+      ]
+    },
+    {
+      "id": "notebooklm",
+      "type": "external",
+      "label": "NotebookLM",
+      "sublabel": "CLI nlm · Studio API",
+      "pos": [690, 90],
+      "size": [142, 62],
+      "sources": [
+        {
+          "path": "scripts/hai_tiktok_worker.py",
+          "line": 740,
+          "label": "create_video()"
+        }
+      ]
+    },
+    {
+      "id": "authGate",
+      "type": "security",
+      "label": "Auth Gate",
+      "sublabel": "API-Key · Cookie",
+      "pos": [880, 90],
+      "size": [142, 62],
+      "sources": [
+        {
+          "path": "src/lib/auth.ts",
+          "line": 119,
+          "label": "requireApiAuth()"
+        }
+      ]
+    },
+    {
+      "id": "haiApi",
+      "type": "backend",
+      "label": "HAI API",
+      "sublabel": "Next Route Handlers",
+      "pos": [880, 250],
+      "size": [142, 62],
+      "sources": [
+        {
+          "path": "src/app/api/v1/posts/route.ts",
+          "line": 80,
+          "label": "POST /api/v1/posts"
+        }
+      ]
+    },
+    {
+      "id": "sqlite",
+      "type": "database",
+      "label": "SQLite",
+      "sublabel": "Prisma · hai.db",
+      "pos": [690, 410],
+      "size": [142, 62],
+      "sources": [
+        {
+          "path": "prisma/schema.prisma",
+          "line": 15,
+          "label": "model Post"
+        }
+      ]
+    },
+    {
+      "id": "mediaStore",
+      "type": "cloud",
+      "label": "Media Store",
+      "sublabel": "data/media · /api/media",
+      "pos": [880, 410],
+      "size": [142, 62],
+      "sources": [
+        {
+          "path": "src/lib/media.ts",
+          "line": 63,
+          "label": "saveUpload()"
+        }
+      ]
+    },
+    {
+      "id": "webFeed",
+      "type": "frontend",
+      "label": "Web Feed",
+      "sublabel": "Next App · Feed + Upload",
+      "pos": [1080, 250],
+      "size": [142, 62],
+      "sources": [
+        {
+          "path": "src/app/page.tsx",
+          "line": 1,
+          "label": "Home → Feed"
+        }
+      ]
+    },
+    {
+      "id": "mobileApp",
+      "type": "frontend",
+      "label": "Mobile App",
+      "sublabel": "Expo · FeedScreen",
+      "pos": [1080, 90],
+      "size": [142, 62],
+      "sources": [
+        {
+          "path": "mobile/src/screens/FeedScreen.tsx",
+          "line": 27,
+          "label": "FeedScreen"
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Pipeline Runtime — hai-tiktok OUT · queue · variants",
+      "wraps": ["agentSessions", "sessionWorker", "pipeline", "scriptOptimizer"]
+    },
+    {
+      "kind": "region",
+      "label": "App Runtime — Next.js · Docker :3000",
+      "wraps": ["haiApi", "sqlite", "mediaStore", "webFeed", "authGate"]
+    },
+    {
+      "kind": "security-group",
+      "label": "Auth Trust Zone",
+      "wraps": ["haiApi", "authGate", "sqlite", "mediaStore"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "enqueue",
+      "from": "agentSessions",
+      "to": "sessionWorker",
+      "label": "enqueue",
+      "labelDy": -32
+    },
+    {
+      "id": "tick",
+      "from": "sessionWorker",
+      "to": "pipeline",
+      "label": "tick()",
+      "labelDy": -32
+    },
+    {
+      "id": "refine",
+      "from": "pipeline",
+      "to": "scriptOptimizer",
+      "label": "assess · refine",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "labelDx": -46
+    },
+    {
+      "id": "reserve-video",
+      "from": "pipeline",
+      "to": "notebooklm",
+      "label": "create video",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "labelDx": -40
+    },
+    {
+      "id": "poll-status",
+      "from": "notebooklm",
+      "to": "pipeline",
+      "label": "poll + download",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDx": 42
+    },
+    {
+      "id": "publish-post",
+      "from": "pipeline",
+      "to": "haiApi",
+      "label": "publish post",
+      "variant": "dashed"
+    },
+    {
+      "id": "ingest-nlm",
+      "from": "webFeed",
+      "to": "haiApi",
+      "label": "POST /ingest",
+      "labelDy": -62,
+      "labelDx": -138
+    },
+    {
+      "id": "verify-auth",
+      "from": "authGate",
+      "to": "haiApi",
+      "label": "verify",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 30
+    },
+    {
+      "id": "persist-prisma",
+      "from": "haiApi",
+      "to": "sqlite",
+      "label": "Prisma",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDx": -28
+    },
+    {
+      "id": "store-media",
+      "from": "haiApi",
+      "to": "mediaStore",
+      "label": "saveUpload",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDx": 28
+    },
+    {
+      "id": "serve-feed",
+      "from": "sqlite",
+      "to": "webFeed",
+      "label": "getPosts()",
+      "fromSide": "bottom",
+      "toSide": "bottom",
+      "via": [[761, 500], [1151, 500]]
+    },
+    {
+      "id": "mobile-fetch",
+      "from": "mobileApp",
+      "to": "haiApi",
+      "label": "GET /posts",
+      "labelDy": 30,
+      "labelDx": 34
+    },
+    {
+      "id": "web-upload",
+      "from": "webFeed",
+      "to": "mediaStore",
+      "label": "upload",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 18
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Hauptpfad",
+      "items": [
+        "Agenten-Session (Hermes/Codex) → queue.txt → Session Worker distill → Pipeline Coordinator tick",
+        "Koordinator reserviert block-freie Revision und erstellt NotebookLM-Video über nlm CLI",
+        "Fertiges Video wird auf 1080×1920 vertikal recodiert und als Post persistiert"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "App",
+      "items": [
+        "Next.js 16 App Router: / (Feed) öffentlich, /upload + /ingest hinter Auth-Middleware",
+        "API: POST /api/v1/posts (text/multipart) und POST /api/v1/ingest/notebooklm (splitNotebookContent)",
+        "SQLite (Prisma + BetterSQLite3) + Filesystem-Media unter /api/media mit Range-Support"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Qualität & Trust",
+      "items": [
+        "Script-Optimizer: Rubrik clarity/specificity/story/voice/ending, Blocker-Gate, beidseitiger Vergleich",
+        "Sanitizer entfernt Secrets, E-Mails, URLs, private Pfade vor jedem Provider-Call",
+        "Auth-Gate: HAI_API_KEY (Bearer) oder signierter hai_admin-Cookie — einheitlich in requireApiAuth"
+      ]
+    }
+  ]
+}
