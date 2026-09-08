@@ -60,6 +60,10 @@ Current interpretation: low-consensus findings matter and must be preserved for 
 
 ## Representative artifacts
 
+To see how model choice changed the output, open the dedicated comparison page:
+
+- [`docs/model-choice-impact.md`](docs/model-choice-impact.md) — per-model table with HTML maps, screenshots, structure counts, visual-check status, and the latest six-model merge contribution.
+
 ### HAI-MCP, Opus map: visual-check pass
 
 ![HAI-MCP Opus architecture](docs/assets/hai-mcp-opus-1440-dark.png)
@@ -131,6 +135,7 @@ The project tracks more than whether HTML was produced:
 - `data/architecture-runs.json` — machine-readable summary and run metrics.
 - `data/latest-specialized-scouting-result.md` / `.json` — newer 110-evidence / 53-concept variance signal reported by Samuel.
 - `data/published-generated-artifacts.json` — index of the published Archify website artifacts.
+- `data/model-choice-impact.json` — derived model-choice comparison table for online reading.
 - `data/hai-mcp.claims.md` — 37 verified HAI-MCP concepts.
 - `data/hai-tiktok.claims.md` — 54 verified HAI-TIKTOK concepts.
 - `data/codex-archify-experiment.claims.md` — 21 verified codex-archify-experiment concepts.

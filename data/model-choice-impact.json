@@ -1,0 +1,43 @@
+{
+  "purpose": "Make visible how model choice affected Archify output structure, visual-check behavior, and merge contribution.",
+  "status": "exploratory; visual-check pass/fail is artifact health, not semantic quality",
+  "latest_fanout_cluster_contribution": {
+    "muse-spark-1.3": 22,
+    "nemotron-3-ultra": 22,
+    "ling-3.0-flash-fin": 18,
+    "mimo-v2.5": 17,
+    "muse-spark-1.2": 11,
+    "nemotron-3.5-lightning": 0
+  },
+  "latest_consensus_split": {
+    ">=3_models": {"verified": 12, "unverified": 0},
+    "<=2_models": {"verified": 41, "verified_share": 0.77, "unverified": 9}
+  },
+  "published_model_artifact_rows": [
+    {"project":"codex-archify-experiment","model":"muse-spark-1.3","concepts":21,"components":10,"connections":9,"views":3,"visual_check":"pass","diagnostics":0,"html":"generated/cae.architecture.muse-spark-1.3.html","screenshot":"generated/cae.architecture.muse-spark-1.3.visual-check.1440x900.dark.png"},
+    {"project":"codex-archify-experiment","model":"mimo-v2.5","concepts":21,"components":9,"connections":10,"views":3,"visual_check":"pass","diagnostics":0,"html":"generated/cae.architecture.mimo-v2.5.html","screenshot":"generated/cae.architecture.mimo-v2.5.visual-check.1440x900.dark.png"},
+    {"project":"codex-archify-experiment","model":"nemotron-3.5-lightning","concepts":21,"components":8,"connections":7,"views":0,"visual_check":"pass","diagnostics":0,"html":"generated/cae.architecture.nemotron-3.5-lightning.html","screenshot":"generated/cae.architecture.nemotron-3.5-lightning.visual-check.1440x900.dark.png"},
+    {"project":"codex-archify-experiment","model":"nemotron-3-ultra","concepts":21,"components":11,"connections":11,"views":0,"visual_check":"not-run","diagnostics":0,"html":null,"screenshot":null},
+    {"project":"hai-mcp","model":"baseline","concepts":37,"components":10,"connections":10,"views":3,"visual_check":"pass","diagnostics":0,"html":"generated/hai-mcp.architecture.html","screenshot":"generated/hai-mcp.architecture.visual-check.1440x900.dark.png"},
+    {"project":"hai-mcp","model":"opus","concepts":37,"components":12,"connections":12,"views":3,"visual_check":"pass","diagnostics":0,"html":"generated/hai-mcp.architecture.opus.html","screenshot":"generated/hai-mcp.architecture.opus.visual-check.1440x900.dark.png"},
+    {"project":"hai-mcp","model":"mimo","concepts":37,"components":10,"connections":9,"views":3,"visual_check":"pass","diagnostics":0,"html":"generated/hai-mcp.architecture.mimo.html","screenshot":"generated/hai-mcp.architecture.mimo.visual-check.1440x900.dark.png"},
+    {"project":"hai-mcp","model":"muse","concepts":37,"components":10,"connections":11,"views":3,"visual_check":"pass","diagnostics":0,"html":"generated/hai-mcp.architecture.muse.html","screenshot":"generated/hai-mcp.architecture.muse.visual-check.1440x900.dark.png"},
+    {"project":"hai-mcp","model":"minimax","concepts":37,"components":12,"connections":11,"views":0,"visual_check":"pass","diagnostics":0,"html":"generated/hai-mcp.architecture.minimax.html","screenshot":"generated/hai-mcp.architecture.minimax.visual-check.1440x900.dark.png"},
+    {"project":"hai-mcp","model":"haiku","concepts":37,"components":10,"connections":9,"views":0,"visual_check":"pass","diagnostics":0,"html":"generated/hai-mcp.architecture.haiku.html","screenshot":"generated/hai-mcp.architecture.haiku.visual-check.1440x900.dark.png"},
+    {"project":"hai-mcp","model":"nemoultra","concepts":37,"components":13,"connections":15,"views":3,"visual_check":"not-run","diagnostics":0,"html":null,"screenshot":null},
+    {"project":"hai-mcp","model":"composed","concepts":37,"components":13,"connections":13,"views":3,"visual_check":"fail","diagnostics":3,"html":"generated/hai-mcp.architecture.composed.html","screenshot":"generated/hai-mcp.architecture.composed.visual-check.1440x900.dark.png"},
+    {"project":"hai-tiktok","model":"opus","concepts":54,"components":12,"connections":11,"views":3,"visual_check":"pass","diagnostics":0,"html":"generated/hai-tiktok.architecture.opus.html","screenshot":"generated/hai-tiktok.architecture.opus.visual-check.1440x900.dark.png"},
+    {"project":"hai-tiktok","model":"mimo-v2.5","concepts":54,"components":9,"connections":7,"views":3,"visual_check":"pass","diagnostics":0,"html":"generated/hai-tiktok.architecture.mimo-v2.5.html","screenshot":"generated/hai-tiktok.architecture.mimo-v2.5.visual-check.1440x900.dark.png"},
+    {"project":"hai-tiktok","model":"muse-spark-1.2","concepts":54,"components":11,"connections":13,"views":3,"visual_check":"pass","diagnostics":0,"html":"generated/hai-tiktok.architecture.muse-spark-1.2.html","screenshot":"generated/hai-tiktok.architecture.muse-spark-1.2.visual-check.1440x900.dark.png"},
+    {"project":"hai-tiktok","model":"ling-3.0-flash-fin","concepts":54,"components":11,"connections":12,"views":2,"visual_check":"fail","diagnostics":6,"html":"generated/hai-tiktok.architecture.ling-3.0-flash-fin.html","screenshot":"generated/hai-tiktok.architecture.ling-3.0-flash-fin.visual-check.1440x900.dark.png"},
+    {"project":"hai-tiktok","model":"muse-spark-1.3","concepts":54,"components":11,"connections":12,"views":4,"visual_check":"fail","diagnostics":6,"html":"generated/hai-tiktok.architecture.muse-spark-1.3.html","screenshot":"generated/hai-tiktok.architecture.muse-spark-1.3.visual-check.1440x900.dark.png"},
+    {"project":"hai-tiktok","model":"nemotron-3-ultra","concepts":54,"components":11,"connections":11,"views":0,"visual_check":"not-run","diagnostics":0,"html":null,"screenshot":null},
+    {"project":"hai-tiktok","model":"nemotron-3.5-lightning","concepts":54,"components":10,"connections":11,"views":0,"visual_check":"not-run","diagnostics":0,"html":null,"screenshot":null}
+  ],
+  "interpretation": [
+    "The same source-grounded claim base led to different structures depending on model choice.",
+    "Some models produced visually healthy maps while others failed visual checks on similar material.",
+    "Low-overlap clusters carry much of the useful signal in the latest fan-out run.",
+    "A model can be useful to the merge without producing finished HTML, but candidate usability and merge contribution must be separated."
+  ]
+}
