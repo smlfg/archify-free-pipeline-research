@@ -1,0 +1,60 @@
+# Local / generated files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+
+# Python environments
+.venv/
+venv/
+env/
+
+# Node / frontend
+node_modules/
+.npm/
+.pnpm-store/
+.next/
+
+# Build outputs
+build/
+dist/
+out/
+release/
+target/
+*.egg-info/
+
+# Logs / temp
+*.log
+logs/
+tmp/
+temp/
+
+# Secrets / local config
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*.json
+token*.json
+secrets*.json
+secret*.json
+*.private.json
+
+# Large local artifacts
+*.AppImage
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+*.rar
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.wav
+*.mp3
+*.flac
