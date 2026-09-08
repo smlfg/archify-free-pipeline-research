@@ -1,0 +1,20 @@
+{
+  "status": "external_artifacts_index",
+  "purpose": "Track online artifacts that are relevant evidence but are hosted outside this GitHub repository.",
+  "artifacts": [
+    {
+      "id": "claude-artifact-6f886a9c-b21c-4719-95b5-b4622268d028",
+      "kind": "claude_artifact_preview",
+      "url": "https://claude.ai/code/artifact/6f886a9c-b21c-4719-95b5-b4622268d028?via=auto_preview",
+      "observed_http_status": 200,
+      "observed_content_type": "text/html",
+      "title_observed": "Claude Artifact",
+      "role_in_repo": "External online artifact referenced as part of the public research trail.",
+      "limitations": [
+        "The fetched page is a dynamic Claude artifact shell with noindex/nofollow metadata.",
+        "The artifact body was not imported into the repo in this pass; only the stable URL and observed accessibility were recorded.",
+        "Because the artifact is externally hosted, availability and access may change outside this repository."
+      ]
+    }
+  ]
+}
