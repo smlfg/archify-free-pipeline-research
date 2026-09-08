@@ -8,7 +8,7 @@ Exploratory research on whether redundant full-repository scouting or specialize
 
 Does redundant full-repository scouting or specialized scouting produce better source-grounded architecture representations when composed by a stronger model?
 
-Status: Exploratory. No strategy has been shown superior yet.
+Status: Exploratory. A newer larger-repo run supports the variance/low-overlap hypothesis; no full orchestration strategy has been shown superior yet.
 
 ## Why this exists
 
@@ -29,6 +29,32 @@ This repository preserves a research trail around Archify as a cognitive checkpo
 | Total | 112 | 19 | 12 | 3 | 4 |
 
 Visual-check means automated browser evidence from Archify, not human perceptual approval. A pass says the artifact fit/readability checks passed in the measured browser viewports; it does not prove semantic superiority.
+
+## New variance signal
+
+A later larger run produced a stronger signal for the fan-out hypothesis:
+
+```text
+110 evidence items from 6 maps -> 53 verified concepts
+```
+
+| Consensus level | Verified | Unverified |
+| --- | ---: | ---: |
+| >=3 models | 12 | 0 |
+| <=2 models | 41 (77%) | 9 |
+
+| Model | Clusters |
+| --- | ---: |
+| muse-spark-1.3 | 22 |
+| nemotron-3-ultra | 22 |
+| ling-3.0-flash-fin | 18 |
+| mimo-v2.5 | 17 |
+| muse-spark-1.2 | 11 |
+| nemotron-3.5-lightning | 0 |
+
+This supports the overlap/variance hypothesis: in the smaller HAI-MCP case, 55% of the substance came from one or two models; in the newer larger run, 77% did. Larger projects appear to reduce overlap between model views, so a consensus-only pruning rule would throw away much of the useful signal.
+
+This is not yet proof that specialized scouting is superior overall. It is evidence that low-consensus findings matter and must be preserved for the stronger aggregator.
 
 ## Representative artifacts
 
@@ -101,6 +127,7 @@ The project tracks more than whether HTML was produced:
 
 - `data/architecture-runs.csv` — compact run table.
 - `data/architecture-runs.json` — machine-readable summary and run metrics.
+- `data/latest-specialized-scouting-result.md` / `.json` — newer 110-evidence / 53-concept variance signal reported by Samuel.
 - `data/hai-mcp.claims.md` — 37 verified HAI-MCP concepts.
 - `data/hai-tiktok.claims.md` — 54 verified HAI-TIKTOK concepts.
 - `data/codex-archify-experiment.claims.md` — 21 verified codex-archify-experiment concepts.
@@ -108,6 +135,6 @@ The project tracks more than whether HTML was produced:
 
 ## Current conclusion
 
-No orchestration strategy has been shown superior yet.
+The low-overlap/fan-out hypothesis now has supporting evidence from a larger run, but no complete orchestration strategy has been shown superior yet.
 
 The scientific value so far is exploratory: the repository contains hypotheses, failure modes, source-grounded claim sets, screenshots, and measurement criteria that make the next comparison auditable instead of anecdotal.

@@ -21,7 +21,7 @@ Gleichzeitig enthielt die Arbeit exploratives Coding und einen Ansatz zum Varian
 
 Does redundant full-repository scouting or specialized scouting produce better source-grounded architecture representations when composed by a stronger model?
 
-Status: Exploratory. No strategy has been shown superior yet.
+Status: Exploratory. Ein neuer größerer Lauf unterstützt die Varianz-/Low-Overlap-Hypothese; eine vollständige Strategie ist weiterhin noch nicht als überlegen gezeigt.
 
 Deutsch: Produziert redundantes Full-Repository-Scouting oder spezialisiertes Scouting bessere source-grounded Architektur-Repräsentationen, wenn ein stärkeres Modell sie komponiert?
 
@@ -45,6 +45,32 @@ Beobachtete Erkenntnisse:
 - Der Merge-Schlüssel sollte die Codestelle sein, nicht das Modelllabel.
 - Eine technisch laufende Pipeline ist noch kein verständliches Produkt.
 - Fehlgeschlagene Läufe sind verwertbar, wenn Prompt, Modellzuordnung, Kosten, Rohantworten und Artefakte erhalten bleiben.
+
+## Neuer Befund
+
+Der neue größere Lauf ist ein stärkerer Befund für den Fächer-Ansatz:
+
+```text
+110 Belege aus 6 Karten -> 53 verifizierte Konzepte
+```
+
+| Konsensniveau | belegt | unbelegt |
+| --- | ---: | ---: |
+| >=3 Modelle | 12 | 0 |
+| <=2 Modelle | 41 (77%) | 9 |
+
+| Modell | Cluster |
+| --- | ---: |
+| muse-spark-1.3 | 22 |
+| nemotron-3-ultra | 22 |
+| ling-3.0-flash-fin | 18 |
+| mimo-v2.5 | 17 |
+| muse-spark-1.2 | 11 |
+| nemotron-3.5-lightning | 0 |
+
+Interpretation: Bei HAI-MCP kamen 55% der Substanz von ein bis zwei Modellen; im neuen größeren Lauf sind es 77%. Je größer das Projekt, desto weniger überlappen die Modellblicke und desto mehr trägt der Fächer. Ein reines Konsensverfahren würde hier viele der nützlichen Funde verwerfen.
+
+Das bestätigt die Varianz-/Low-Overlap-Hypothese für diesen beobachteten Fall. Es beweist noch nicht, dass spezialisierte Scouts als Gesamtstrategie überlegen sind.
 
 ## Kontrollierter Vergleich
 
@@ -100,7 +126,7 @@ Ohne diese Spuren kann man hinterher nicht unterscheiden, ob die Aufgabenverteil
 
 ## Ehrlicher Stand
 
-Wir haben aus fehlgeschlagenen Versuchen einen neuen Skill-/Pipeline-Ansatz abgeleitet und eingebunden. Dass dessen Phasenaufteilung bessere Ergebnisse liefert, ist noch nicht gezeigt. Der laufende Versuch ist daher der Schritt von plausibler Hypothese zu Evidenz.
+Wir haben aus fehlgeschlagenen Versuchen einen neuen Skill-/Pipeline-Ansatz abgeleitet und eingebunden. Der neue größere Lauf zeigt, dass Low-Consensus-Funde sehr viel Substanz tragen können. Dass eine vollständige Phasenaufteilung als Strategie besser ist, ist damit plausibler, aber noch nicht allgemein gezeigt.
 
 Der wissenschaftlich interessante Teil ist nicht die Menge des gebauten Codes, sondern die präzise Frage, die dokumentierten Fehlerbilder und der kontrollierte Vergleich zwischen Redundanz und Spezialisierung.
 
@@ -108,6 +134,6 @@ Der wissenschaftlich interessante Teil ist nicht die Menge des gebauten Codes, s
 
 Ja: wissenschaftlich wertvoll als explorativer Versuchsaufbau.
 
-Noch nein: kein belastbarer Wirksamkeitsnachweis.
+Noch nein: kein allgemeiner Wirksamkeitsnachweis für eine überlegene Gesamtstrategie.
 
 Der nächste belastbare Befund entsteht erst, wenn der laufende Vergleich mit gesicherten Prompts, Modellrollen, Rohantworten, Artefakten und Bewertungskriterien ausgewertet wird.
