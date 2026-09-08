@@ -1,0 +1,71 @@
+{
+  "snapshot": "357c0d5df4616639ef1b06d8934e3c15ec6e9528a264731ceaccab91761000b7",
+  "revision": "d31d0a38d1f1089aceb9dba2ab50c0137dfe238f",
+  "status": "reference questions; manual semantic judgment required",
+  "checks": [
+    {
+      "id": "owner-channel",
+      "expected": "Owner-Kanal ist eine getrennte Freigabequelle; Dateirechte sind eine Betriebsannahme.",
+      "path": "src/hai_mcp/owner_gate.py",
+      "start": 119,
+      "end": 140,
+      "quote": "class FileOwnerChannel:\n    \"\"\"Write the code to HAI_OWNER_HOME — a directory the agent must not be able to read.\"\"\"\n\n    name = \"file\"\n\n    def __init__(self, owner_home: Path, hai_home: Path) -> None:\n        self.owner_home = owner_home\n        self.hai_home = hai_home\n\n    def deliver(self, challenge: dict[str, Any], code: str) -> dict[str, Any]:\n        owner_home = real_path(self.owner_home)\n        hai_home = real_path(self.hai_home)\n        if owner_home == hai_home or hai_home in owner_home.parents:\n            raise OwnerChannelError(\n                \"HAI_OWNER_HOME is inside HAI_HOME; the agent could read every code. \"\n                \"Point HAI_OWNER_HOME to a directory the agent cannot read.\"\n            )\n        owner_home.mkdir(parents=True, exist_ok=True, mode=0o700)\n        try:\n            os.chmod(owner_home, 0o700)\n        except OSError:\n            pass"
+    },
+    {
+      "id": "transport",
+      "expected": "HTTP-Bind-Prüfung ist kein gemeinsamer stdio-Authentifizierungspfad.",
+      "path": "src/hai_mcp/server.py",
+      "start": 450,
+      "end": 477,
+      "quote": "    if args.transport == \"streamable-http\":\n        token = http_token_from_env()\n        allowed, msg = http_bind_allowed(args.host, token)\n        if not allowed:\n            raise SystemExit(msg)\n        mcp.settings.host = args.host\n        mcp.settings.port = args.port\n        if token:\n\n            async def _serve_with_token() -> None:\n                import uvicorn\n\n                app = wrap_with_bearer_token(mcp.streamable_http_app(), token)\n                config = uvicorn.Config(\n                    app,\n                    host=args.host,\n                    port=args.port,\n                    log_level=mcp.settings.log_level.lower(),\n                )\n                server = uvicorn.Server(config)\n                await server.serve()\n\n            anyio.run(_serve_with_token)\n        else:\n            mcp.run(transport=\"streamable-http\")\n        return\n\n    mcp.run(transport=\"stdio\")"
+    },
+    {
+      "id": "bind-policy",
+      "expected": "Nichtlokales HTTP-Binding verlangt einen Token.",
+      "path": "src/hai_mcp/http_transport.py",
+      "start": 10,
+      "end": 34,
+      "quote": "def http_bind_allowed(host: str, token: str | None = None) -> tuple[bool, str]:\n    \"\"\"Fail-closed bind policy: non-loopback hosts require a non-empty bearer token.\"\"\"\n    normalized = str(host or \"\").strip().lower()\n    if not normalized:\n        return False, \"host is required\"\n    if normalized in LOOPBACK_HOSTS:\n        return True, \"\"\n    if token and str(token).strip():\n        return True, \"\"\n    return False, \"non-loopback HTTP bind requires HAI_HTTP_TOKEN\"\n\n\ndef verify_bearer_token(authorization: str | None, expected_token: str) -> bool:\n    if not authorization or not str(authorization).startswith(\"Bearer \"):\n        return False\n    provided = authorization[7:].strip()\n    if not provided or not expected_token:\n        return False\n    return hmac.compare_digest(provided, expected_token)\n\n\ndef http_token_from_env() -> str | None:\n    raw = os.environ.get(\"HAI_HTTP_TOKEN\", \"\").strip()\n    return raw or None\n"
+    },
+    {
+      "id": "strict-input",
+      "expected": "strict_int lehnt bool und Strings ab.",
+      "path": "src/hai_mcp/boundary.py",
+      "start": 13,
+      "end": 19,
+      "quote": "def strict_int(value: Any, name: str, *, min_value: int | None = None) -> tuple[int | None, dict[str, Any] | None]:\n    if not isinstance(value, int) or isinstance(value, bool):\n        return None, _invalid(name, \"must be a literal integer\")\n    if min_value is not None and value < min_value:\n        return None, _invalid(name, f\"must be >= {min_value}\")\n    return value, None\n"
+    },
+    {
+      "id": "path-guard",
+      "expected": "Pfadprüfung löst reale Pfade auf und prüft die erlaubte Wurzel.",
+      "path": "src/hai_mcp/paths.py",
+      "start": 76,
+      "end": 88,
+      "quote": "def assert_under(path: Path, root: Path) -> Path:\n    \"\"\"Resolve *path* and ensure its real path stays under *root* (symlink-safe).\"\"\"\n    resolved = real_path(path.expanduser())\n    root_r = real_path(root)\n    try:\n        resolved.relative_to(root_r)\n    except ValueError as exc:\n        raise PathError(\n            \"path_outside_root\",\n            f\"path {resolved} is outside allowed root {root_r}\",\n            path=str(resolved),\n            root=str(root_r),\n        ) from exc"
+    },
+    {
+      "id": "audit-callback",
+      "expected": "MissionEngine übergibt append_audit als Callback an OwnerGate.",
+      "path": "src/hai_mcp/mission.py",
+      "start": 103,
+      "end": 107,
+      "quote": "        ensure_hai_home(self.cfg)\n        self.missions_dir.mkdir(parents=True, exist_ok=True)\n        self.audit_dir.mkdir(parents=True, exist_ok=True)\n        self.parking_dir.mkdir(parents=True, exist_ok=True)\n        self.owner_gate = OwnerGate(self.cfg, audit=self.append_audit)"
+    },
+    {
+      "id": "intake",
+      "expected": "hai_intake ruft die Intake-Funktion auf; es gibt hier keinen Agentenstart.",
+      "path": "src/hai_mcp/server.py",
+      "start": 305,
+      "end": 308,
+      "quote": "@mcp.tool()\ndef hai_intake(raw: str) -> str:\n    \"\"\"Capture a raw thought immutably. Returns an intake id only — never actionable, never starts an agent.\"\"\"\n    return _json(get_control_plane().intake(raw))"
+    },
+    {
+      "id": "history",
+      "expected": "NEXT_STEP wird historisiert; diese Stelle belegt keine allgemeine State-Migration.",
+      "path": "src/hai_mcp/state.py",
+      "start": 376,
+      "end": 388,
+      "quote": "        canonical = ad / \"NEXT_STEP.md\"\n        history_dir = ad / \"history\"\n        history_dir.mkdir(exist_ok=True)\n        stamp = time.strftime(\"%Y%m%dT%H%M%S\")\n        if canonical.is_file():\n            atomic_write_text(\n                history_dir / f\"NEXT_STEP_{stamp}_prev.md\",\n                canonical.read_text(encoding=\"utf-8\"),\n            )\n        meta = (\n            f\"\\n\\n---\\n\"\n            f\"_Accepted via hai-mcp_\\n\"\n            f\"- at: {time.strftime('%Y-%m-%dT%H:%M:%S%z')}\\n\""
+    }
+  ]
+}
