@@ -1,0 +1,38 @@
+{
+  "status": "exploratory",
+  "research_question": "Does redundant full-repository scouting or specialized scouting produce better source-grounded architecture representations when composed by a stronger model?",
+  "summary": {
+    "architecture_specs_measured": 19,
+    "visual_checks_passed": 12,
+    "visual_checks_failed": 3,
+    "visual_checks_not_run": 4,
+    "source_grounded_concept_sets": {
+      "hai-mcp": 37,
+      "hai-tiktok": 54,
+      "codex-archify-experiment": 21
+    },
+    "claim_merge_key": "source code location, not model label",
+    "conclusion": "No strategy has been shown superior yet. Current value is exploratory: hypotheses, artifacts, failure modes, and measurable comparison criteria."
+  },
+  "runs": [
+    {"project":"codex-archify-experiment","model":"muse-spark-1.3","source_grounded_concepts":21,"components":10,"connections":9,"guided_views":3,"visual_check":"pass","diagnostics":0,"overflow_viewports":0,"min_node_text_px":6},
+    {"project":"codex-archify-experiment","model":"mimo-v2.5","source_grounded_concepts":21,"components":9,"connections":10,"guided_views":3,"visual_check":"pass","diagnostics":0,"overflow_viewports":0,"min_node_text_px":6},
+    {"project":"codex-archify-experiment","model":"nemotron-3.5-lightning","source_grounded_concepts":21,"components":8,"connections":7,"guided_views":0,"visual_check":"pass","diagnostics":0,"overflow_viewports":0,"min_node_text_px":6},
+    {"project":"codex-archify-experiment","model":"nemotron-3-ultra","source_grounded_concepts":21,"components":11,"connections":11,"guided_views":0,"visual_check":"not-run","diagnostics":0},
+    {"project":"hai-mcp","model":"baseline","source_grounded_concepts":37,"components":10,"connections":10,"guided_views":3,"visual_check":"pass","diagnostics":0,"overflow_viewports":0,"min_node_text_px":6},
+    {"project":"hai-mcp","model":"opus","source_grounded_concepts":37,"components":12,"connections":12,"guided_views":3,"visual_check":"pass","diagnostics":0,"overflow_viewports":0,"min_node_text_px":6},
+    {"project":"hai-mcp","model":"mimo","source_grounded_concepts":37,"components":10,"connections":9,"guided_views":3,"visual_check":"pass","diagnostics":0,"overflow_viewports":0,"min_node_text_px":6},
+    {"project":"hai-mcp","model":"muse","source_grounded_concepts":37,"components":10,"connections":11,"guided_views":3,"visual_check":"pass","diagnostics":0,"overflow_viewports":0,"min_node_text_px":6},
+    {"project":"hai-mcp","model":"minimax","source_grounded_concepts":37,"components":12,"connections":11,"guided_views":0,"visual_check":"pass","diagnostics":0,"overflow_viewports":0,"min_node_text_px":6},
+    {"project":"hai-mcp","model":"haiku","source_grounded_concepts":37,"components":10,"connections":9,"guided_views":0,"visual_check":"pass","diagnostics":0,"overflow_viewports":0,"min_node_text_px":6},
+    {"project":"hai-mcp","model":"nemoultra","source_grounded_concepts":37,"components":13,"connections":15,"guided_views":3,"visual_check":"not-run","diagnostics":0},
+    {"project":"hai-mcp","model":"composed","source_grounded_concepts":37,"components":13,"connections":13,"guided_views":3,"visual_check":"fail","diagnostics":3,"overflow_viewports":2,"min_node_text_px":6},
+    {"project":"hai-tiktok","model":"opus","source_grounded_concepts":54,"components":12,"connections":11,"guided_views":3,"visual_check":"pass","diagnostics":0,"overflow_viewports":0,"min_node_text_px":6},
+    {"project":"hai-tiktok","model":"mimo-v2.5","source_grounded_concepts":54,"components":9,"connections":7,"guided_views":3,"visual_check":"pass","diagnostics":0,"overflow_viewports":0,"min_node_text_px":6},
+    {"project":"hai-tiktok","model":"muse-spark-1.2","source_grounded_concepts":54,"components":11,"connections":13,"guided_views":3,"visual_check":"pass","diagnostics":0,"overflow_viewports":0,"min_node_text_px":6},
+    {"project":"hai-tiktok","model":"ling-3.0-flash-fin","source_grounded_concepts":54,"components":11,"connections":12,"guided_views":2,"visual_check":"fail","diagnostics":6,"overflow_viewports":4,"min_node_text_px":6},
+    {"project":"hai-tiktok","model":"muse-spark-1.3","source_grounded_concepts":54,"components":11,"connections":12,"guided_views":4,"visual_check":"fail","diagnostics":6,"overflow_viewports":4,"min_node_text_px":6},
+    {"project":"hai-tiktok","model":"nemotron-3-ultra","source_grounded_concepts":54,"components":11,"connections":11,"guided_views":0,"visual_check":"not-run","diagnostics":0},
+    {"project":"hai-tiktok","model":"nemotron-3.5-lightning","source_grounded_concepts":54,"components":10,"connections":11,"guided_views":0,"visual_check":"not-run","diagnostics":0}
+  ]
+}

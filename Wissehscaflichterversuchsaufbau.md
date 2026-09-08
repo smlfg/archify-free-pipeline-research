@@ -17,9 +17,13 @@ Gleichzeitig enthielt die Arbeit exploratives Coding und einen Ansatz zum Varian
 | Varianztest | Mehrere Modelle dasselbe Repo unabhängig lesen zu lassen, macht unterschiedliche Funde und Auslassungen sichtbar. Die früheren Vergleichsläufe passen zu dieser Forschungsfrage. |
 | Arbeitsteilung | Die Variante „ein Modell pro Phase“ untersucht Spezialisierung. Sie ist kein sauberer Modellvergleich, weil jedes Modell eine andere Aufgabe bekommt. |
 
-## Eigentliche Forschungsfrage
+## Forschungsfrage
 
-Wie beeinflusst die Aufgabenverteilung zwischen günstigen Modellen und einem starken Aggregator die Qualität einer verständlichen, codegestützten Architekturkarte?
+Does redundant full-repository scouting or specialized scouting produce better source-grounded architecture representations when composed by a stronger model?
+
+Status: Exploratory. No strategy has been shown superior yet.
+
+Deutsch: Produziert redundantes Full-Repository-Scouting oder spezialisiertes Scouting bessere source-grounded Architektur-Repräsentationen, wenn ein stärkeres Modell sie komponiert?
 
 Darin stecken zwei unterscheidbare Hypothesen:
 
